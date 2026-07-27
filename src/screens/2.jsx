@@ -13,12 +13,13 @@ const AVAILABLE_MODES = {
 };
 
 const PALETTE = {
-    cyan: 0x00f2ff,
-    gold: 0xffcc00,
-    purple: 0xaa00ff,
-    dark: 0x000b14,
-    grid: 0x002233,
-    white: 0xffffff
+    cyan: 0x0099cc,
+    gold: 0xd4a017,
+    purple: 0x8a2be2,
+    light: 0xf4f7f6,
+    grid: 0xcccccc,
+    white: 0xffffff,
+    text: 0x2d3748
 };
 
 const MODULES = [
@@ -31,7 +32,7 @@ const MODULES = [
         features: ['Smooth Animations', 'Interactive Elements', 'Modern UI'],
         x: -5.5,
         color: PALETTE.cyan,
-        colorStr: '#00f2ff'
+        colorStr: '#0099cc'
     },
     {
         id: 'work',
@@ -42,7 +43,7 @@ const MODULES = [
         features: ['Terminal Commands', 'Efficient Navigation', 'Project Logs'],
         x: 0,
         color: PALETTE.gold,
-        colorStr: '#ffcc00'
+        colorStr: '#d4a017'
     },
     {
         id: 'normal',
@@ -53,7 +54,7 @@ const MODULES = [
         features: ['Simple Design', 'Fast Loading', 'Intuitive UI'],
         x: 5.5,
         color: PALETTE.purple,
-        colorStr: '#aa00ff'
+        colorStr: '#8a2be2'
     }
 ];
 
@@ -101,8 +102,9 @@ export default function App() {
         const height = window.innerHeight;
 
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(PALETTE.dark, 0.04);
-        
+        scene.background = new THREE.Color(PALETTE.light);
+        scene.fog = new THREE.FogExp2(PALETTE.light, 0.04);
+
         const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
         const isMobile = width < 768;
         camera.position.set(0, isMobile ? 8 : 5, isMobile ? 25 : 18);
@@ -113,26 +115,26 @@ export default function App() {
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         mountRef.current.appendChild(renderer.domElement);
 
-        const ambient = new THREE.AmbientLight(0x404040, 1.2);
+        const ambient = new THREE.AmbientLight(0x444444, 1.8);
         scene.add(ambient);
-        
-        const mainLight = new THREE.SpotLight(0xffffff, 2.5);
+
+        const mainLight = new THREE.SpotLight(0xffffff, 4.0);
         mainLight.position.set(0, 20, 10);
         mainLight.angle = Math.PI / 4;
         mainLight.penumbra = 0.5;
         scene.add(mainLight);
 
-        const grid = new THREE.GridHelper(60, 60, PALETTE.cyan, PALETTE.grid);
+        const grid = new THREE.GridHelper(60, 60, PALETTE.grid, PALETTE.grid);
         grid.position.y = -3;
         grid.material.transparent = true;
-        grid.material.opacity = 0.15;
+        grid.material.opacity = 0.3;
         scene.add(grid);
 
         const partGeo = new THREE.BufferGeometry();
         const partPos = new Float32Array(1500 * 3);
-        for(let i=0; i<4500; i++) partPos[i] = (Math.random() - 0.5) * 50;
+        for (let i = 0; i < 4500; i++) partPos[i] = (Math.random() - 0.5) * 50;
         partGeo.setAttribute('position', new THREE.BufferAttribute(partPos, 3));
-        const particles = new THREE.Points(partGeo, new THREE.PointsMaterial({ size: 0.03, color: 0x00f2ff, transparent: true, opacity: 0.3 }));
+        const particles = new THREE.Points(partGeo, new THREE.PointsMaterial({ size: 0.04, color: PALETTE.text, transparent: true, opacity: 0.25 }));
         scene.add(particles);
 
         // --- Custom Holographic STATIC Material Shader ---
@@ -147,7 +149,7 @@ export default function App() {
                 transparent: true,
                 side: THREE.DoubleSide,
                 depthWrite: false,
-                blending: THREE.AdditiveBlending,
+                blending: THREE.NormalBlending,
                 vertexShader: `
                     varying vec2 vUv;
                     void main() {
@@ -210,17 +212,17 @@ export default function App() {
             group.position.y = -3;
 
             const baseGeo = new THREE.CylinderGeometry(1.8, 2.2, 0.5, 8);
-            const baseMat = new THREE.MeshStandardMaterial({ color: 0x050505, roughness: 0.2, metalness: 0.8 });
+            const baseMat = new THREE.MeshStandardMaterial({ color: 0x2a303c, roughness: 0.5, metalness: 0.6 });
             const base = new THREE.Mesh(baseGeo, baseMat);
             group.add(base);
 
             const bodyGeo = new THREE.CylinderGeometry(1.2, 1.6, 3, 8);
-            const bodyMat = new THREE.MeshStandardMaterial({ 
-                color: 0x0a0a0a, 
-                roughness: 0.1, 
-                metalness: 1.0,
+            const bodyMat = new THREE.MeshStandardMaterial({
+                color: 0x1e242f,
+                roughness: 0.2,
+                metalness: 0.8,
                 emissive: mod.color,
-                emissiveIntensity: 0.02
+                emissiveIntensity: 0.15
             });
             const body = new THREE.Mesh(bodyGeo, bodyMat);
             body.position.y = 1.75;
@@ -228,9 +230,9 @@ export default function App() {
 
             const ringGeo = new THREE.TorusGeometry(1.45, 0.05, 8, 50);
             const ringMat = new THREE.MeshBasicMaterial({ color: mod.color, transparent: true, opacity: 0.6 });
-            
+
             const ring1 = new THREE.Mesh(ringGeo, ringMat);
-            ring1.rotation.x = Math.PI/2;
+            ring1.rotation.x = Math.PI / 2;
             ring1.position.y = 0.8;
             group.add(ring1);
 
@@ -239,7 +241,7 @@ export default function App() {
             ring2.scale.set(0.85, 0.85, 0.85);
             group.add(ring2);
 
-            for(let j=0; j<8; j++) {
+            for (let j = 0; j < 8; j++) {
                 const stripGeo = new THREE.BoxGeometry(0.06, 2.8, 0.12);
                 const stripMat = new THREE.MeshBasicMaterial({ color: mod.color });
                 const strip = new THREE.Mesh(stripGeo, stripMat);
@@ -260,14 +262,14 @@ export default function App() {
             scanner.rotation.x = Math.PI / 2;
             group.add(scanner);
 
-            group.userData = { 
-                id: mod.id, 
-                index: i, 
-                card, 
+            group.userData = {
+                id: mod.id,
+                index: i,
+                card,
                 scanner,
                 rings: [ring1, ring2],
                 body,
-                baseColor: mod.color 
+                baseColor: mod.color
             };
             scene.add(group);
             return group;
@@ -281,7 +283,7 @@ export default function App() {
 
         const onClick = () => {
             stateRef.current.raycaster.setFromCamera(stateRef.current.mouse, camera);
-            const targetObjects = podiumGroups.map(p => p.children[12]); 
+            const targetObjects = podiumGroups.map(p => p.children[12]);
             const intersects = stateRef.current.raycaster.intersectObjects(targetObjects);
             if (intersects.length > 0) {
                 handleModuleSelect(intersects[0].object.parent.userData.id);
@@ -303,7 +305,7 @@ export default function App() {
             stateRef.current.raycaster.setFromCamera(stateRef.current.mouse, camera);
             const targetObjects = podiumGroups.map(p => p.children[12]);
             const intersects = stateRef.current.raycaster.intersectObjects(targetObjects);
-            
+
             if (intersects.length > 0) {
                 const hoveredIdx = intersects[0].object.parent.userData.index;
                 if (stateRef.current.activeIndex !== hoveredIdx) {
@@ -318,7 +320,7 @@ export default function App() {
                 const data = p.userData;
                 const pulse = (Math.sin(time * 4) * 0.5 + 0.5);
                 const activePulse = isActive ? (0.8 + pulse * 0.2) : 0.2;
-                
+
                 data.rings.forEach((ring, ri) => {
                     ring.rotation.z += 0.015 * (ri + 1);
                     ring.material.opacity = THREE.MathUtils.lerp(ring.material.opacity, isActive ? 0.9 : 0.4, 0.1);
@@ -339,12 +341,12 @@ export default function App() {
                     isActive ? 0.4 : 0.08,
                     0.08
                 );
-                
+
                 data.card.position.y = 6.2 + Math.sin(time * 2 + i) * 0.15;
 
                 data.body.material.emissiveIntensity = THREE.MathUtils.lerp(
-                    data.body.material.emissiveIntensity, 
-                    isActive ? 0.3 * activePulse : 0.02, 
+                    data.body.material.emissiveIntensity,
+                    isActive ? 0.3 * activePulse : 0.02,
                     0.1
                 );
 
@@ -354,7 +356,7 @@ export default function App() {
 
             const targetCamX = stateRef.current.mouse.x * (window.innerWidth < 768 ? 1.5 : 3.5);
             const targetCamY = (window.innerWidth < 768 ? 8 : 5) + stateRef.current.mouse.y * 1.5;
-            
+
             camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetCamX, 0.04);
             camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetCamY, 0.04);
             camera.lookAt(0, window.innerWidth < 768 ? 4 : 2.5, 0);
@@ -394,7 +396,7 @@ export default function App() {
             <BackButton />
             <div className="vignette" />
             <div className="scanline" />
-            
+
             <div className="corner-brackets top-left" />
             <div className="corner-brackets top-right" />
             <div className="corner-brackets bottom-left" />
@@ -403,7 +405,7 @@ export default function App() {
             <div ref={mountRef} className="canvas-container" />
 
             <div className="ui-layer">
-                <motion.div 
+                <motion.div
                     className="header-hud"
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -412,31 +414,13 @@ export default function App() {
                         <h1>AGRIM SIGDEL</h1>
                         <div className="header-line" />
                     </div>
-                    <div className="status-indicator">
-                        <span className="blink-dot" />
-                        <p className="status-text">SYSTEM_ACTIVE // BROADCASTING_EXPERIENCE_SIGNAL</p>
-                    </div>
                 </motion.div>
 
-                <div className="side-monitor">
-                    <div className="monitor-row">
-                        <span>CPU_LOAD</span>
-                        <div className="mini-bar"><div className="fill" style={{ width: '65%' }} /></div>
-                    </div>
-                    <div className="monitor-row">
-                        <span>NET_PULSE</span>
-                        <div className="mini-bar"><div className="fill" style={{ width: '82%' }} /></div>
-                    </div>
-                    <div className="monitor-row">
-                        <span>MEM_ALLOC</span>
-                        <div className="mini-bar"><div className="fill" style={{ width: '34%' }} /></div>
-                    </div>
-                    <div className="monitor-footer">ENCRYPT_LEVEL: OMEGA_8</div>
-                </div>
+
 
                 <AnimatePresence mode="wait">
                     {hoveredModule && !isSwitching && (
-                        <motion.div 
+                        <motion.div
                             key={hoveredModule.id}
                             className="cyber-card"
                             initial={{ opacity: 0, rotateX: 20, y: 50, scale: 0.95 }}
@@ -444,16 +428,10 @@ export default function App() {
                             exit={{ opacity: 0, y: -10, scale: 0.98, filter: 'blur(10px)' }}
                             transition={{ type: 'spring', damping: 20, stiffness: 100 }}
                         >
-                            <div className="card-glitch-border" />
-                            <div className="card-header">
-                                <div className="card-id-tag">{hoveredModule.code}</div>
-                                <div className="card-category">{hoveredModule.name}</div>
-                            </div>
-                            
                             <div className="card-body">
                                 <h2 className="card-title">{hoveredModule.title}</h2>
                                 <p className="card-desc">{hoveredModule.description}</p>
-                                
+
                                 <div className="feature-grid">
                                     {hoveredModule.features.map((f, i) => (
                                         <div key={f} className="feature-node" style={{ animationDelay: `${i * 0.1}s` }}>
@@ -463,20 +441,11 @@ export default function App() {
                                     ))}
                                 </div>
                             </div>
-
-                            <div className="card-footer">
-                                <div className="initialize-prompt">
-                                    <span className="prompt-arrows">&gt;&gt;</span>
-                                    INIT_DRIVE
-                                    <span className="prompt-bracket">]</span>
-                                </div>
-                                <div className="card-serial">SN_{hoveredModule.id.toUpperCase()}</div>
-                            </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
 
-                <motion.div 
+                <motion.div
                     className="footer-hud"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -485,7 +454,7 @@ export default function App() {
                         <div className="coord-item">LAT: 27.6710° N</div>
                         <div className="coord-item">LNG: 85.3414° E</div>
                     </div>
-                    
+
                     <div className="social-links-hud">
                         <a href="#github" className="hud-link">GITHUB</a>
                         <div className="link-divider" />
@@ -498,7 +467,7 @@ export default function App() {
 
             <AnimatePresence>
                 {isSwitching && (
-                    <motion.div 
+                    <motion.div
                         className="transition-overlay"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -522,118 +491,117 @@ export default function App() {
                 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400;700&display=swap');
 
                 :root {
-                    --bg-dark: #000b14;
+                    --bg-light: #f4f7f6;
+                    --text-main: #2d3748;
+                    --text-muted: #718096;
+                    --border-color: rgba(0, 0, 0, 0.1);
+                    --glass-bg: rgba(255, 255, 255, 0.85);
                 }
 
                 .mode-selector-hud {
-                    position: fixed; inset: 0; background: var(--bg-dark);
+                    position: fixed; inset: 0; background: var(--bg-light);
                     font-family: 'JetBrains Mono', monospace; 
-                    color: var(--active-color);
+                    color: var(--text-main);
                     overflow: hidden; cursor: crosshair;
                     perspective: 1000px;
                     touch-action: none;
                 }
 
-                .vignette { position: absolute; inset: 0; background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.8) 100%); pointer-events: none; z-index: 2; }
-                .scanline { position: absolute; inset: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); z-index: 100; background-size: 100% 4px, 3px 100%; pointer-events: none; opacity: 0.3; }
+                .vignette { position: absolute; inset: 0; background: radial-gradient(circle, transparent 30%, rgba(255,255,255,0.6) 100%); pointer-events: none; z-index: 2; }
+                .scanline { display: none; }
 
                 .canvas-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
 
-                .corner-brackets { position: absolute; width: clamp(20px, 5vw, 40px); height: clamp(20px, 5vw, 40px); border: 2px solid var(--active-color); opacity: 0.3; z-index: 5; pointer-events: none; transition: 0.5s; }
-                .top-left { top: 20px; left: 20px; border-right: 0; border-bottom: 0; }
-                .top-right { top: 20px; right: 20px; border-left: 0; border-bottom: 0; }
-                .bottom-left { bottom: 20px; left: 20px; border-right: 0; border-top: 0; }
-                .bottom-right { bottom: 20px; right: 20px; border-left: 0; border-top: 0; }
+                .corner-brackets { position: absolute; width: clamp(20px, 5vw, 40px); height: clamp(20px, 5vw, 40px); border: 2px solid var(--active-color); opacity: 0.5; z-index: 5; pointer-events: none; transition: 0.5s; }
+                .top-left { top: 2rem; left: 2rem; border-right: 0; border-bottom: 0; }
+                .top-right { top: 2rem; right: 2rem; border-left: 0; border-bottom: 0; }
+                .bottom-left { bottom: 2rem; left: 2rem; border-right: 0; border-top: 0; }
+                .bottom-right { bottom: 2rem; right: 2rem; border-left: 0; border-top: 0; }
 
                 .ui-layer { 
                     position: absolute; inset: 0; z-index: 10; 
-                    padding: clamp(1rem, 3vw, 3rem); 
+                    padding: clamp(2rem, 4vw, 4rem); 
                     pointer-events: none; 
                     display: flex; flex-direction: column; 
                     justify-content: space-between;
                 }
 
-                .header-hud { pointer-events: auto; }
+                .header-hud { pointer-events: auto; display: flex; flex-direction: column; align-items: flex-start; }
                 .header-hud h1 { 
                     font-family: 'Orbitron', sans-serif; font-weight: 900; 
-                    font-size: clamp(1.2rem, 3vw, 2rem); 
-                    letter-spacing: clamp(2px, 1vw, 8px); 
-                    margin: 0; text-shadow: 0 0 15px var(--active-color); transition: 0.3s; 
+                    font-size: clamp(1.5rem, 3vw, 2.5rem); 
+                    letter-spacing: clamp(1px, 0.5vw, 4px); 
+                    margin: 0; color: var(--text-main); transition: 0.3s; text-shadow: none;
                 }
-                .header-line { width: 60px; height: 3px; background: var(--active-color); margin-top: 5px; box-shadow: 0 0 10px var(--active-color); }
-                .status-indicator { display: flex; align-items: center; margin-top: 10px; gap: 8px; }
-                .blink-dot { width: 6px; height: 6px; background: var(--active-color); border-radius: 50%; animation: blink 1s infinite; }
-                .status-text { font-size: 0.5rem; letter-spacing: 1px; opacity: 0.6; margin: 0; }
+                .header-line { width: 80px; height: 4px; background: var(--active-color); margin-top: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+                .status-indicator { display: flex; align-items: center; margin-top: 12px; gap: 10px; background: var(--glass-bg); padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+                .blink-dot { width: 8px; height: 8px; background: var(--active-color); border-radius: 50%; animation: blink 1.5s infinite; }
+                .status-text { font-size: 0.6rem; letter-spacing: 1px; color: var(--text-muted); margin: 0; font-weight: 700; }
 
-                .side-monitor { 
-                    position: absolute; right: 3rem; top: 50%; transform: translateY(-50%);
-                    width: 140px; font-size: 0.5rem; opacity: 0.5; 
-                    display: flex; flex-direction: column;
-                }
-                .monitor-row { margin-bottom: 8px; }
-                .mini-bar { width: 100%; height: 2px; background: rgba(255,255,255,0.05); margin-top: 3px; }
-                .fill { height: 100%; background: var(--active-color); }
+
 
                 .cyber-card {
-                    position: absolute; left: 50%; bottom: clamp(5rem, 12vh, 8rem); transform: translateX(-50%);
-                    width: clamp(260px, 85vw, 360px);
-                    background: rgba(0, 11, 20, 0.8); backdrop-filter: blur(15px);
-                    border: 1px solid rgba(255,255,255,0.08); border-left: 3px solid var(--active-color);
-                    padding: 0; pointer-events: auto; clip-path: polygon(0 0, 94% 0, 100% 8%, 100% 100%, 6% 100%, 0 92%);
-                    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+                    position: absolute; right: 4rem; top: 50%; transform: translateY(-50%);
+                    width: clamp(280px, 25vw, 360px);
+                    background: var(--glass-bg); backdrop-filter: blur(20px);
+                    border: 1px solid var(--border-color); border-top: 4px solid var(--active-color);
+                    padding: 0; pointer-events: auto; border-radius: 16px;
+                    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+                    overflow: hidden;
+                    clip-path: none;
                 }
 
-                .card-glitch-border { position: absolute; top: 0; right: 0; width: 30px; height: 30px; background: linear-gradient(45deg, transparent 50%, var(--active-color) 40%); opacity: 0.3; }
+                .card-glitch-border { display: none; }
                 
-                .card-header { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
-                .card-id-tag { background: var(--active-color); color: #000; font-weight: 900; font-size: 0.55rem; padding: 1px 6px; }
-                .card-category { font-family: 'Orbitron'; font-size: 0.5rem; letter-spacing: 1.5px; opacity: 0.6; }
+                .card-header { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.5rem; background: rgba(0,0,0,0.02); border-bottom: 1px solid var(--border-color); }
+                .card-id-tag { background: var(--active-color); color: #fff; font-weight: 900; font-size: 0.65rem; padding: 4px 10px; border-radius: 6px; }
+                .card-category { font-family: 'Orbitron'; font-size: 0.6rem; letter-spacing: 2px; color: var(--text-muted); font-weight: 700; }
 
-                .card-body { padding: 1rem 1.2rem; }
-                .card-title { font-family: 'Orbitron'; font-size: clamp(1rem, 4vw, 1.4rem); margin: 0 0 0.5rem; color: #fff; }
-                .card-desc { font-size: 0.75rem; opacity: 0.5; line-height: 1.4; margin-bottom: 1rem; }
+                .card-body { padding: 1.5rem; }
+                .card-title { font-family: 'Orbitron'; font-size: clamp(1.2rem, 4vw, 1.8rem); margin: 0 0 0.8rem; color: var(--text-main); font-weight: 900; }
+                .card-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem; }
 
-                .feature-grid { display: grid; grid-template-columns: 1fr; gap: 6px; }
-                .feature-node { display: flex; align-items: center; gap: 6px; font-size: 0.6rem; opacity: 0.8; }
-                .node-dot { width: 3px; height: 3px; background: var(--active-color); }
+                .feature-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+                .feature-node { display: flex; align-items: center; gap: 10px; font-size: 0.75rem; color: var(--text-main); font-weight: 700; background: rgba(0,0,0,0.03); padding: 8px 12px; border-radius: 8px; }
+                .node-dot { width: 6px; height: 6px; background: var(--active-color); border-radius: 50%; }
 
-                .card-footer { padding: 0.8rem 1.2rem; background: rgba(255,255,255,0.01); display: flex; justify-content: space-between; align-items: center; }
-                .initialize-prompt { font-size: 0.6rem; font-weight: 900; color: var(--active-color); letter-spacing: 1.5px; }
-                .card-serial { font-size: 0.45rem; opacity: 0.2; }
+                .card-footer { padding: 1.2rem 1.5rem; background: rgba(0,0,0,0.02); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+                .initialize-prompt { font-size: 0.75rem; font-weight: 900; color: var(--active-color); letter-spacing: 1px; display: flex; align-items: center; gap: 6px; }
+                .prompt-arrows { font-size: 1rem; }
+                .card-serial { font-size: 0.55rem; color: var(--text-muted); font-weight: 700; }
 
-                .footer-hud { display: flex; justify-content: space-between; align-items: flex-end; pointer-events: auto; width: 100%; }
-                .coord-panel { font-size: 0.5rem; opacity: 0.4; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 0.8rem; }
+                .footer-hud { display: flex; justify-content: space-between; align-items: center; pointer-events: auto; width: 100%; background: var(--glass-bg); padding: 12px 24px; border-radius: 30px; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+                .coord-panel { font-size: 0.65rem; color: var(--text-muted); font-weight: 700; display: flex; gap: 16px; border-left: none; padding-left: 0; }
                 
-                .social-links-hud { display: flex; align-items: center; gap: 1rem; }
-                .hud-link { font-size: 0.5rem; color: #fff; text-decoration: none; opacity: 0.4; transition: 0.3s; }
-                .hud-link:hover { opacity: 1; color: var(--active-color); }
-                .link-divider { width: 1px; height: 8px; background: rgba(255,255,255,0.1); }
+                .social-links-hud { display: flex; align-items: center; gap: 1.5rem; }
+                .hud-link { font-size: 0.65rem; color: var(--text-muted); text-decoration: none; font-weight: 700; transition: 0.3s; letter-spacing: 1px; opacity: 1; }
+                .hud-link:hover { color: var(--active-color); }
+                .link-divider { width: 4px; height: 4px; background: var(--text-muted); border-radius: 50%; opacity: 0.3; }
                 
-                .time-display { font-family: 'Orbitron'; font-size: 0.65rem; opacity: 0.7; }
+                .time-display { font-family: 'Orbitron'; font-size: 0.8rem; font-weight: 700; color: var(--text-main); opacity: 1; }
 
-                .transition-overlay { position: fixed; inset: 0; z-index: 1000; background: var(--bg-dark); display: flex; align-items: center; justify-content: center; }
-                .hex-bg { position: absolute; inset: 0; opacity: 0.05; background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l25.98 15v30L30 60 4.02 45V15z' fill='none' stroke='%23fff' stroke-width='1'/%3E%3C/svg%3E"); }
+                .transition-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(244, 247, 246, 0.9); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; }
+                .hex-bg { position: absolute; inset: 0; opacity: 0.1; background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l25.98 15v30L30 60 4.02 45V15z' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E"); }
                 
-                .loading-core { text-align: center; width: 200px; }
-                .spinner-outer { width: 60px; height: 60px; border: 2px solid rgba(var(--active-color), 0.1); border-top-color: var(--active-color); border-radius: 50%; animation: spin 2s linear infinite; margin: 0 auto; }
-                .loading-text { font-family: 'Orbitron'; margin-top: 1rem; font-size: 0.6rem; color: #fff; letter-spacing: 4px; }
-                .progress-container { width: 100%; height: 1px; background: rgba(255,255,255,0.05); margin-top: 1rem; position: relative; }
+                .loading-core { text-align: center; width: 240px; background: var(--glass-bg); padding: 2rem; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
+                .spinner-outer { width: 50px; height: 50px; border: 3px solid rgba(0,0,0,0.05); border-top-color: var(--active-color); border-radius: 50%; animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; margin: 0 auto; }
+                .loading-text { font-family: 'Orbitron'; margin-top: 1.5rem; font-size: 0.75rem; color: var(--text-main); font-weight: 900; letter-spacing: 3px; }
+                .progress-container { width: 100%; height: 4px; background: rgba(0,0,0,0.05); margin-top: 1.5rem; border-radius: 2px; position: relative; overflow: hidden; }
                 .progress-bar-fill { position: absolute; left: 0; height: 100%; width: 0; background: var(--active-color); animation: load-progress 2.5s ease-in-out forwards; }
 
                 @keyframes spin { to { transform: rotate(360deg); } }
                 @keyframes load-progress { to { width: 100%; } }
-                @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+                @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-                @media (max-width: 1024px) {
-                    .side-monitor { display: none; }
-                }
+
 
                 @media (max-width: 767px) {
-                    .header-hud { width: 100%; text-align: center; display: flex; flex-direction: column; align-items: center; }
+                    .ui-layer { padding: 1.5rem; }
+                    .header-hud { align-items: center; text-align: center; }
                     .header-line { margin-inline: auto; }
-                    .cyber-card { width: 280px; bottom: 6rem; }
-                    .footer-hud { flex-direction: column; align-items: center; gap: 0.8rem; }
-                    .coord-panel { border-left: 0; border-top: 1px solid rgba(255,255,255,0.1); padding: 0.5rem 0 0 0; text-align: center; width: 100%; }
+                    .cyber-card { position: absolute; right: auto; left: 50%; transform: translateX(-50%); top: auto; bottom: 8.5rem; width: 90vw; max-height: 45vh; overflow-y: auto; }
+                    .footer-hud { flex-direction: column; align-items: center; gap: 1rem; border-radius: 20px; padding: 16px; margin-bottom: 0.5rem; }
+                    .coord-panel { justify-content: center; width: 100%; border-top: none; }
                 }
             `}</style>
         </div>
