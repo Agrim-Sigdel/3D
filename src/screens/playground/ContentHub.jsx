@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useThreeScene } from '../../hooks/useThreeScene.js';
 import BackButton from '../BackButton';
 import { PROFILE, ROLES, STACK, PROJECTS, formatCoordinates } from '../../data/portfolio.js';
 import * as THREE from 'three';
@@ -77,7 +78,6 @@ const PageWrapper = ({ children, onBack, bg = "bg-black" }) => (
 // --- Main Hub Component ---
 
 export default function App() {
-    const mountRef = useRef(null);
     const [currentPage, setCurrentPage] = useState('hub');
     const [activeIdx, setActiveIdx] = useState(1);
     const [isTransitioning, setIsTransitioning] = useState(false);
@@ -103,24 +103,9 @@ export default function App() {
         currentPageRef.current = currentPage;
     }, [activeIdx, currentPage]);
 
-    useEffect(() => {
-        const mount = mountRef.current;
-        if (!mount) return;
-
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(PALETTE.dark);
+    const mountRef = useThreeScene(({ scene, camera, renderer }) => {
         scene.fog = new THREE.FogExp2(PALETTE.dark, 0.035);
-        
-        const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
         camera.position.set(0, 6, 22);
-        
-        const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
-        renderer.setSize(width, height);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        mount.appendChild(renderer.domElement);
 
         // Lights
         const ambient = new THREE.AmbientLight(0x404040, 0.5);
@@ -188,14 +173,11 @@ export default function App() {
 
         sceneState.current = { ...sceneState.current, scene, camera, renderer, podiums, particles };
 
-        let frameId;
-        const animate = () => {
-            frameId = requestAnimationFrame(animate);
+        const frame = ({ time }) => {
+            // Sub-pages cover the canvas completely; don't burn GPU behind
+            // them. Returning false skips the draw for this tick.
+            if (currentPageRef.current !== 'hub') return false;
 
-            // Sub-pages cover the canvas completely; don't burn GPU behind them.
-            if (currentPageRef.current !== 'hub') return;
-
-            const time = sceneState.current.clock.getElapsedTime();
             const currentIdx = activeIdxRef.current;
 
             // Smoothly move target X based on active index
@@ -225,16 +207,6 @@ export default function App() {
             });
 
             particles.rotation.y += 0.0005;
-
-            renderer.render(scene, camera);
-        };
-
-        animate();
-
-        const handleResize = () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
         };
 
         const handleMouseMove = (e) => {
@@ -242,23 +214,18 @@ export default function App() {
             sceneState.current.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
         };
 
-        window.addEventListener('resize', handleResize);
         window.addEventListener('mousemove', handleMouseMove);
 
-        return () => {
-            window.removeEventListener('resize', handleResize);
-            window.removeEventListener('mousemove', handleMouseMove);
-            cancelAnimationFrame(frameId);
-
-            scene.traverse((obj) => {
-                if (obj.geometry) obj.geometry.dispose();
-                if (obj.material) {
-                    (Array.isArray(obj.material) ? obj.material : [obj.material]).forEach(m => m.dispose());
-                }
-            });
-            renderer.dispose();
-            renderer.domElement.remove();
+        return {
+            frame,
+            dispose: () => window.removeEventListener('mousemove', handleMouseMove),
         };
+    }, {
+        alpha: false,
+        background: PALETTE.dark,
+        cameraFov: 40,
+        cameraFar: 1000,
+        powerPreference: 'high-performance',
     }, []);
 
     const navigate = (dir) => {

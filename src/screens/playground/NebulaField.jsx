@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import BackButton from '../BackButton';
+import { useThreeScene, useLatest } from '../../hooks/useThreeScene.js';
 import * as THREE from 'three';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -42,7 +43,6 @@ const GENERATED_DIAMONDS = Array.from({ length: DIAMOND_COUNT }).map((_, i) => {
 });
 
 export default function App() {
-    const mountRef = useRef(null);
     const [view, setView] = useState('nebula'); 
     const [activeIdx, setActiveIdx] = useState(0);
     const [zoomLevel, setZoomLevel] = useState(70);
@@ -51,15 +51,11 @@ export default function App() {
     // One DOM node per diamond, positioned imperatively from the render loop.
     const labelRefs = useRef([]);
     
-    // Sync state to ref for animation loop access without closure staling
-    const reactiveState = useRef({ view, activeIdx, isPlaying });
-    useEffect(() => {
-        reactiveState.current = { view, activeIdx, isPlaying };
-    }, [view, activeIdx, isPlaying]);
+    // Read by the render loop, which must not be rebuilt when these change.
+    const reactiveState = useLatest({ view, activeIdx, isPlaying });
 
     const sceneState = useRef({
         mouse: new THREE.Vector2(),
-        clock: new THREE.Clock(),
         raycaster: new THREE.Raycaster(),
         hoveredId: null,
         targetZoom: 70,
@@ -83,22 +79,8 @@ export default function App() {
 
     const togglePlay = () => setIsPlaying(!isPlaying);
 
-    useEffect(() => {
-        const mount = mountRef.current;
-        if (!mount) return;
-
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(THEME.background);
+    const mountRef = useThreeScene(({ scene, camera }) => {
         scene.fog = new THREE.FogExp2(THEME.background, 0.004);
-        
-        const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 4000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(width, height);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        mount.appendChild(renderer.domElement);
 
         scene.add(new THREE.AmbientLight(0xff6600, 0.3));
         const sun = new THREE.DirectionalLight(0xffffff, 1.0);
@@ -159,11 +141,7 @@ export default function App() {
         const particles = new THREE.Points(partGeo, new THREE.PointsMaterial({ size: 0.8, color: 0xff6600, transparent: true, opacity: 0.3 }));
         scene.add(particles);
 
-        let rafId;
-        const animate = () => {
-            rafId = requestAnimationFrame(animate);
-            const delta = sceneState.current.clock.getDelta();
-            const time = sceneState.current.clock.getElapsedTime();
+        const frame = ({ time, delta }) => {
             const state = sceneState.current;
             const { view: curView, activeIdx: curActiveIdx, isPlaying: curIsPlaying } = reactiveState.current;
 
@@ -260,9 +238,7 @@ export default function App() {
 
             gridMat.emissiveIntensity = 0.1 + Math.sin(time * 0.4) * 0.1;
             particles.rotation.y += 0.0006;
-            renderer.render(scene, camera);
         };
-        animate();
 
         const onMouseMove = (e) => {
             const state = sceneState.current;
@@ -339,38 +315,28 @@ export default function App() {
             if (e.key === 'Enter') setView('detail');
         };
 
-        const onResize = () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        };
-
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('mousedown', onMouseDown);
         window.addEventListener('mouseup', onMouseUp);
         window.addEventListener('wheel', onWheel, { passive: false });
         window.addEventListener('click', onClick);
         window.addEventListener('keydown', onKeyDown);
-        window.addEventListener('resize', onResize);
 
-        return () => {
-            cancelAnimationFrame(rafId);
-            window.removeEventListener('mousemove', onMouseMove);
-            window.removeEventListener('mousedown', onMouseDown);
-            window.removeEventListener('mouseup', onMouseUp);
-            window.removeEventListener('wheel', onWheel);
-            window.removeEventListener('click', onClick);
-            window.removeEventListener('keydown', onKeyDown);
-            window.removeEventListener('resize', onResize);
-            scene.traverse((obj) => {
-                if (obj.geometry) obj.geometry.dispose();
-                if (obj.material) {
-                    (Array.isArray(obj.material) ? obj.material : [obj.material]).forEach(m => m.dispose());
-                }
-            });
-            renderer.dispose();
-            renderer.domElement.remove();
+        return {
+            frame,
+            dispose: () => {
+                window.removeEventListener('mousemove', onMouseMove);
+                window.removeEventListener('mousedown', onMouseDown);
+                window.removeEventListener('mouseup', onMouseUp);
+                window.removeEventListener('wheel', onWheel);
+                window.removeEventListener('click', onClick);
+                window.removeEventListener('keydown', onKeyDown);
+            },
         };
+    }, {
+        background: THEME.background,
+        cameraFov: 60,
+        cameraFar: 4000,
     }, []);
 
     const activeData = GENERATED_DIAMONDS[activeIdx];

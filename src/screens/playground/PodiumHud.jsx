@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useThreeScene } from '../../hooks/useThreeScene.js';
 import BackButton from '../BackButton';
 import { PROFILE, formatCoordinates } from '../../data/portfolio.js';
 import * as THREE from 'three';
@@ -284,7 +285,6 @@ function buildStrips(accent, theme) {
 const BUILDERS = { diamond: buildDiamond, pillar: buildPillar, strips: buildStrips };
 
 export default function PodiumHud({ theme: themeName = 'dark', podium: initialPodium = 'diamond' }) {
-    const mountRef = useRef(null);
     const [podium, setPodium] = useState(initialPodium);
     const [hoveredModule, setHoveredModule] = useState(MODULES[1]);
     const [selectedModule, setSelectedModule] = useState(null);
@@ -320,25 +320,11 @@ export default function PodiumHud({ theme: themeName = 'dark', podium: initialPo
         }, 2500);
     }, []);
 
-    useEffect(() => {
-        const mount = mountRef.current;
-        if (!mount) return;
+    const mountRef = useThreeScene(({ scene, camera }) => {
+        const isMobile = window.innerWidth < 768;
 
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        const isMobile = width < 768;
-
-        const scene = new THREE.Scene();
-        if (!theme.transparentBackground) scene.background = new THREE.Color(theme.bg);
         scene.fog = new THREE.FogExp2(theme.bg, theme.fogDensity);
-
-        const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
         camera.position.set(0, isMobile ? 8 : 6, isMobile ? 25 : 20);
-
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(width, height);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        mount.appendChild(renderer.domElement);
 
         scene.add(new THREE.AmbientLight(theme.ambient.color, theme.ambient.intensity));
 
@@ -400,28 +386,17 @@ export default function PodiumHud({ theme: themeName = 'dark', podium: initialPo
             if (hit) handleModuleSelect(MODULES[hit.object.userData.index].id);
         };
 
-        const onResize = () => {
-            const w = window.innerWidth;
-            const h = window.innerHeight;
-            camera.aspect = w / h;
-            camera.updateProjectionMatrix();
-            renderer.setSize(w, h);
+        // Podiums pull inward on narrow viewports.
+        const layout = ({ width }) => {
             podiums.forEach((p, i) => {
-                p.group.position.x = w < 768 ? MODULES[i].x * 0.7 : MODULES[i].x;
+                p.group.position.x = width < 768 ? MODULES[i].x * 0.7 : MODULES[i].x;
             });
         };
 
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('click', onClick);
-        window.addEventListener('resize', onResize);
-        onResize();
 
-        let frameId;
-        const clock = new THREE.Clock();
-
-        const animate = () => {
-            frameId = requestAnimationFrame(animate);
-            const time = clock.getElapsedTime();
+        const frame = ({ time }) => {
             const { raycaster, mouse } = stateRef.current;
 
             particles.rotation.y += 0.0002;
@@ -479,26 +454,20 @@ export default function PodiumHud({ theme: themeName = 'dark', podium: initialPo
             camera.position.x = THREE.MathUtils.lerp(camera.position.x, mouse.x * 2, 0.05);
             camera.position.y = THREE.MathUtils.lerp(camera.position.y, (isMobile ? 8 : 6) + mouse.y, 0.05);
             camera.lookAt(0, 2.5, 0);
-
-            renderer.render(scene, camera);
         };
-        animate();
 
-        return () => {
-            cancelAnimationFrame(frameId);
-            window.removeEventListener('mousemove', onMouseMove);
-            window.removeEventListener('click', onClick);
-            window.removeEventListener('resize', onResize);
-
-            scene.traverse((obj) => {
-                if (obj.geometry) obj.geometry.dispose();
-                if (obj.material) {
-                    (Array.isArray(obj.material) ? obj.material : [obj.material]).forEach(m => m.dispose());
-                }
-            });
-            renderer.dispose();
-            renderer.domElement.remove();
+        return {
+            frame,
+            resize: layout,
+            dispose: () => {
+                window.removeEventListener('mousemove', onMouseMove);
+                window.removeEventListener('click', onClick);
+            },
         };
+    }, {
+        background: theme.transparentBackground ? null : theme.bg,
+        cameraFov: 45,
+        cameraFar: 1000,
     }, [handleModuleSelect, podium, theme]);
 
     return (

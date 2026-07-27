@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import BackButton from '../BackButton';
+import { useThreeScene, useLatest } from '../../hooks/useThreeScene.js';
 import * as THREE_LIB from 'three';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -110,20 +111,16 @@ const NebulaShader = {
 };
 
 export default function App() {
-    const mountRef = useRef(null);
     const [view, setView] = useState('overview'); 
     const [activeIdx, setActiveIdx] = useState(0);
     const [isPlaying, setIsPlaying] = useState(true);
     const [isHovering, setIsHovering] = useState(false);
-    
-    const reactiveState = useRef({ view, activeIdx, isPlaying });
-    useEffect(() => {
-        reactiveState.current = { view, activeIdx, isPlaying };
-    }, [view, activeIdx, isPlaying]);
+
+    // Read by the render loop, which must not be rebuilt when these change.
+    const reactiveState = useLatest({ view, activeIdx, isPlaying });
 
     const sceneState = useRef({
         mouse: new THREE.Vector2(),
-        clock: new THREE.Clock(),
         raycaster: new THREE.Raycaster(),
         hoveredIdx: null,
         targetZoom: 180,
@@ -143,24 +140,8 @@ export default function App() {
         sceneState.current.targetZoom = Math.min(Math.max(sceneState.current.targetZoom + delta, 60), 450);
     };
 
-    useEffect(() => {
-        const mount = mountRef.current;
-        if (!mount) return;
-
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(THEME.bgDark);
+    const mountRef = useThreeScene(({ scene, camera }) => {
         scene.fog = new THREE.FogExp2(THEME.bgDark, 0.001);
-        
-        const camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 5000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(w, h);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.toneMapping = THREE.ReinhardToneMapping;
-        renderer.toneMappingExposure = 2.0;
-        mount.appendChild(renderer.domElement);
 
         scene.add(new THREE.AmbientLight(0xffffff, 0.1));
         
@@ -264,11 +245,7 @@ export default function App() {
             return { group, core, shell, flareGroup, light, data, hitArea };
         });
 
-        let rafId;
-        const animate = () => {
-            rafId = requestAnimationFrame(animate);
-            const delta = sceneState.current.clock.getDelta();
-            const time = sceneState.current.clock.getElapsedTime();
+        const frame = ({ time, delta }) => {
             const st = sceneState.current;
             const { view: curView, activeIdx: curActiveIdx, isPlaying: curIsPlaying } = reactiveState.current;
 
@@ -339,9 +316,7 @@ export default function App() {
                 n.group.position.y = n.data.pos.y + Math.sin(time + i) * 5;
             });
 
-            renderer.render(scene, camera);
         };
-        animate();
 
         // Event Listeners
         const onMouseMove = (e) => {
@@ -384,32 +359,28 @@ export default function App() {
             if (e.ctrlKey || e.metaKey || e.shiftKey) { e.preventDefault(); handleZoom(e.deltaY * 0.5); return; }
         };
 
-        const onResize = () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); };
-
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('mousedown', onMouseDown);
         window.addEventListener('dblclick', onDblClick);
         window.addEventListener('mouseup', onMouseUp);
         window.addEventListener('wheel', onWheel, { passive: false });
-        window.addEventListener('resize', onResize);
 
-        return () => {
-            cancelAnimationFrame(rafId);
-            window.removeEventListener('mousemove', onMouseMove);
-            window.removeEventListener('mousedown', onMouseDown);
-            window.removeEventListener('dblclick', onDblClick);
-            window.removeEventListener('mouseup', onMouseUp);
-            window.removeEventListener('wheel', onWheel);
-            window.removeEventListener('resize', onResize);
-            scene.traverse((obj) => {
-                if (obj.geometry) obj.geometry.dispose();
-                if (obj.material) {
-                    (Array.isArray(obj.material) ? obj.material : [obj.material]).forEach(m => m.dispose());
-                }
-            });
-            renderer.dispose();
-            renderer.domElement.remove();
+        return {
+            frame,
+            dispose: () => {
+                window.removeEventListener('mousemove', onMouseMove);
+                window.removeEventListener('mousedown', onMouseDown);
+                window.removeEventListener('dblclick', onDblClick);
+                window.removeEventListener('mouseup', onMouseUp);
+                window.removeEventListener('wheel', onWheel);
+            },
         };
+    }, {
+        background: THEME.bgDark,
+        cameraFov: 50,
+        cameraFar: 5000,
+        toneMapping: THREE.ReinhardToneMapping,
+        toneMappingExposure: 2.0,
     }, []);
 
     const activeNodeData = GENERATED_NODES[activeIdx];
