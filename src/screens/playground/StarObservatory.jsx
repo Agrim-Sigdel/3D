@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import BackButton from './BackButton';
+import BackButton from '../BackButton';
 import * as THREE_LIB from 'three';
 import { motion, AnimatePresence } from 'framer-motion';
 

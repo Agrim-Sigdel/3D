@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import BackButton from './BackButton';
-import { PROFILE, formatCoordinates } from '../data/portfolio.js';
+import BackButton from '../BackButton';
+import { PROFILE, formatCoordinates } from '../../data/portfolio.js';
 import * as THREE from 'three';
 import { motion, AnimatePresence } from 'framer-motion';
 
