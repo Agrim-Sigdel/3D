@@ -45,9 +45,11 @@ export default function App() {
     const mountRef = useRef(null);
     const [view, setView] = useState('nebula'); 
     const [activeIdx, setActiveIdx] = useState(0);
-    const [uiLabels, setUiLabels] = useState([]);
     const [zoomLevel, setZoomLevel] = useState(70);
     const [isPlaying, setIsPlaying] = useState(false);
+
+    // One DOM node per diamond, positioned imperatively from the render loop.
+    const labelRefs = useRef([]);
     
     // Sync state to ref for animation loop access without closure staling
     const reactiveState = useRef({ view, activeIdx, isPlaying });
@@ -232,19 +234,29 @@ export default function App() {
                 d.pLight.intensity = isActive ? (curView === 'detail' ? 40 : 20) : (isHovered ? 15 : 6);
             });
 
-            const labels = GENERATED_DIAMONDS.map((d, i) => {
-                const vec = d.pos.clone();
-                vec.project(camera);
-                const isVisible = vec.z < 1 && curView === 'nebula' && Math.abs(vec.x) < 0.85 && Math.abs(vec.y) < 0.85;
-                return {
-                    id: d.id,
-                    x: (vec.x * 0.5 + 0.5) * window.innerWidth,
-                    y: (-(vec.y * 0.5) + 0.5) * window.innerHeight,
-                    visible: isVisible,
-                    active: i === curActiveIdx
-                };
+            // Labels track their diamond every frame. Pushing that through
+            // React state would re-render the whole tree at 60fps, so position
+            // and visibility are written straight to the nodes; their contents
+            // still come from React and only change when activeIdx does.
+            const projected = new THREE.Vector3();
+            GENERATED_DIAMONDS.forEach((d, i) => {
+                const el = labelRefs.current[i];
+                if (!el) return;
+
+                projected.copy(d.pos).project(camera);
+                const isVisible = projected.z < 1 && curView === 'nebula'
+                    && Math.abs(projected.x) < 0.85 && Math.abs(projected.y) < 0.85;
+
+                if (!isVisible) {
+                    el.style.visibility = 'hidden';
+                    return;
+                }
+
+                const x = (projected.x * 0.5 + 0.5) * window.innerWidth;
+                const y = (-(projected.y * 0.5) + 0.5) * window.innerHeight;
+                el.style.visibility = 'visible';
+                el.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
             });
-            setUiLabels(labels);
 
             gridMat.emissiveIntensity = 0.1 + Math.sin(time * 0.4) * 0.1;
             particles.rotation.y += 0.0006;
@@ -410,12 +422,16 @@ export default function App() {
                 <AnimatePresence mode="wait">
                     {view === 'nebula' ? (
                         <motion.div key="nebula" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full h-full">
-                            {uiLabels.map((label) => {
-                                const data = GENERATED_DIAMONDS.find(d => d.id === label.id);
-                                if (!label.visible) return null;
+                            {GENERATED_DIAMONDS.map((data, i) => {
+                                const isActive = i === activeIdx;
                                 return (
-                                    <div key={label.id} className={`absolute transition-all duration-1000 pointer-events-none ${label.active ? 'opacity-100 scale-100' : 'opacity-10 scale-50'}`} style={{ left: label.x, top: label.y, transform: 'translate(-50%, -50%)' }}>
-                                        {label.active && (
+                                    <div
+                                        key={data.id}
+                                        ref={el => { labelRefs.current[i] = el; }}
+                                        className={`absolute top-0 left-0 will-change-transform transition-opacity duration-1000 pointer-events-none ${isActive ? 'opacity-100' : 'opacity-10'}`}
+                                        style={{ visibility: 'hidden' }}
+                                    >
+                                        {isActive && (
                                             <div className="relative">
                                                 <div className="absolute inset-0 bg-orange-500/30 blur-[60px] rounded-full animate-pulse" />
                                                 <div className="relative bg-black/80 backdrop-blur-3xl p-10 border border-white/15 rounded-[3rem] text-center min-w-[320px] shadow-2xl border-t-orange-500/50">
@@ -430,7 +446,7 @@ export default function App() {
                                                 </div>
                                             </div>
                                         )}
-                                        {!label.active && <div className="w-14 h-14 border border-white/5 rounded-full flex items-center justify-center"><div className="w-1.5 h-1.5 bg-white/20 rounded-full" /></div>}
+                                        {!isActive && <div className="w-14 h-14 border border-white/5 rounded-full flex items-center justify-center"><div className="w-1.5 h-1.5 bg-white/20 rounded-full" /></div>}
                                     </div>
                                 );
                             })}

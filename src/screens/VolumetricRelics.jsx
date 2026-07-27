@@ -118,8 +118,10 @@ export default function App() {
     const mountRef = useRef(null);
     const [view, setView] = useState('overview'); 
     const [activeIdx, setActiveIdx] = useState(0);
-    const [uiLabels, setUiLabels] = useState([]);
     const [isPlaying, setIsPlaying] = useState(true);
+
+    // One DOM node per relic, positioned imperatively from the render loop.
+    const labelRefs = useRef([]);
     
     // Sync state for Three.js render loop without triggering re-renders
     const reactiveState = useRef({ view, activeIdx, isPlaying });
@@ -420,21 +422,27 @@ export default function App() {
                 n.group.position.y = n.data.pos.y + Math.sin(time + n.data.baseRotation.x * 10) * 3;
             });
 
-            // Project 3D positions to 2D screen space for UI overlays
-            const labels = nodes.map((n, i) => {
-                const vec = n.data.pos.clone();
-                vec.project(camera);
+            // Project 3D positions to 2D screen space for UI overlays. Written
+            // straight to the DOM rather than through React state, which would
+            // re-render the whole tree once per frame; the label contents still
+            // come from React and only change when activeIdx does.
+            const projected = new THREE.Vector3();
+            nodes.forEach((n, i) => {
+                const el = labelRefs.current[i];
+                if (!el) return;
+
+                projected.copy(n.data.pos).project(camera);
                 // Hide if behind camera or in detail view
-                const isVisible = vec.z < 1 && curView === 'overview'; 
-                return {
-                    id: n.data.id,
-                    x: (vec.x * 0.5 + 0.5) * window.innerWidth,
-                    y: (-(vec.y * 0.5) + 0.5) * window.innerHeight,
-                    visible: isVisible,
-                    active: i === curActiveIdx
-                };
+                if (projected.z >= 1 || curView !== 'overview') {
+                    el.style.visibility = 'hidden';
+                    return;
+                }
+
+                const x = (projected.x * 0.5 + 0.5) * window.innerWidth;
+                const y = (-(projected.y * 0.5) + 0.5) * window.innerHeight;
+                el.style.visibility = 'visible';
+                el.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
             });
-            setUiLabels(labels);
 
             renderer.render(scene, camera);
         };
@@ -588,17 +596,17 @@ export default function App() {
                         {view === 'overview' ? (
                             <motion.div key="overview" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0">
                                 {/* Projected Node Labels */}
-                                {uiLabels.map((label) => {
-                                    const nodeData = GENERATED_NODES.find(n => n.id === label.id);
-                                    if (!label.visible) return null;
-                                    
+                                {GENERATED_NODES.map((nodeData, i) => {
+                                    const isActive = i === activeIdx;
+
                                     return (
-                                        <div 
-                                            key={label.id} 
-                                            className={`absolute transition-all duration-500 pointer-events-none transform -translate-x-1/2 -translate-y-1/2 ${label.active ? 'opacity-100 scale-100 z-20' : 'opacity-40 scale-75 z-10'}`} 
-                                            style={{ left: label.x, top: label.y }}
+                                        <div
+                                            key={nodeData.id}
+                                            ref={el => { labelRefs.current[i] = el; }}
+                                            className={`absolute top-0 left-0 will-change-transform transition-opacity duration-500 pointer-events-none ${isActive ? 'opacity-100 z-20' : 'opacity-40 z-10'}`}
+                                            style={{ visibility: 'hidden' }}
                                         >
-                                            {label.active ? (
+                                            {isActive ? (
                                                 <div className="flex items-center gap-4">
                                                     {/* Reticle */}
                                                     <div className="relative w-16 h-16 flex items-center justify-center">
