@@ -303,6 +303,27 @@ export default function App() {
             }
         };
 
+        const onKeyDown = (e) => {
+            const state = sceneState.current;
+            if (e.key === 'Escape') {
+                setView('nebula');
+                state.targetZoom = 70;
+                setZoomLevel(70);
+                state.panOffset.set(0, 0);
+                return;
+            }
+            if (reactiveState.current.view !== 'nebula') return;
+            if (e.key === 'ArrowRight' || e.key === 'd') {
+                setActiveIdx(prev => (prev + 1) % DIAMOND_COUNT);
+                setIsPlaying(false);
+            }
+            if (e.key === 'ArrowLeft' || e.key === 'a') {
+                setActiveIdx(prev => (prev - 1 + DIAMOND_COUNT) % DIAMOND_COUNT);
+                setIsPlaying(false);
+            }
+            if (e.key === 'Enter') setView('detail');
+        };
+
         const onResize = () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
@@ -314,6 +335,7 @@ export default function App() {
         window.addEventListener('mouseup', onMouseUp);
         window.addEventListener('wheel', onWheel, { passive: false });
         window.addEventListener('click', onClick);
+        window.addEventListener('keydown', onKeyDown);
         window.addEventListener('resize', onResize);
 
         return () => {
@@ -323,6 +345,7 @@ export default function App() {
             window.removeEventListener('mouseup', onMouseUp);
             window.removeEventListener('wheel', onWheel);
             window.removeEventListener('click', onClick);
+            window.removeEventListener('keydown', onKeyDown);
             window.removeEventListener('resize', onResize);
             renderer.dispose();
             if (mountRef.current) mountRef.current.innerHTML = '';
@@ -332,7 +355,7 @@ export default function App() {
     const activeData = GENERATED_DIAMONDS[activeIdx];
 
     return (
-        <div className="fixed inset-0 bg-[#050201] overflow-hidden text-white font-manrope select-none">
+        <div className="nebula-field fixed inset-0 bg-[#050201] overflow-hidden text-white font-manrope select-none">
             <BackButton />
             {/* 3D Viewport */}
             <div ref={mountRef} className="absolute inset-0 z-0" />
@@ -416,7 +439,7 @@ export default function App() {
                                     </div>
                                 </div>
                                 <div className="text-[9px] font-mono text-white/20 animate-pulse tracking-[0.6em] uppercase">
-                                    HOLD_SHIFT_TO_ZOOM // SCROLL_TO_TRAVEL
+                                    CMD+SCROLL_TO_ZOOM // SCROLL_OR_ARROWS_TO_TRAVEL // ENTER_TO_OPEN
                                 </div>
                             </div>
                         </motion.div>
@@ -492,10 +515,8 @@ export default function App() {
             </div>
 
             <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,900;1,900&family=Manrope:wght@200;400;800&display=swap');
-                body { margin: 0; background: #050201; font-family: 'Manrope', sans-serif; overflow: hidden; }
-                h1, h2 { font-family: 'Epilogue', sans-serif; }
-                * { transition: color 0.3s ease, border-color 0.3s ease; }
+                .nebula-field { font-family: 'Manrope', sans-serif; }
+                .nebula-field h1, .nebula-field h2 { font-family: 'Epilogue', sans-serif; }
             `}</style>
         </div>
     );

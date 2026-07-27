@@ -1,46 +1,46 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import BackButton from './BackButton';
-
-const screens = [
-  { num: 1, label: 'Screen 1' },
-  { num: 2, label: 'Screen 2' },
-  { num: 3, label: 'Screen 3' },
-  { num: 4, label: 'Screen 4' },
-  { num: 5, label: 'Screen 5' },
-  { num: 6, label: 'Screen 6' },
-  { num: 7, label: 'Screen 7' },
-  { num: 8, label: 'Screen 8' },
-  { num: 9, label: 'Screen 9' },
-];
+import { TEMPLATES } from '../templates.js';
 
 export default function Home() {
   return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0a', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-      <h1 style={{ fontSize: 32, marginBottom: 32 }}>Choose a Screen</h1>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, justifyContent: 'center', marginBottom: 40 }}>
-        {screens.map(s => (
+    <div className="min-h-screen w-full overflow-y-auto bg-[#08080b] px-6 py-16 text-white md:px-12 md:py-24">
+      <header className="mx-auto mb-16 max-w-5xl">
+        <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.5em] text-white/30">
+          Template Library
+        </p>
+        <h1 className="m-0 text-4xl font-black tracking-tight md:text-6xl">
+          Three.js single-page designs
+        </h1>
+        <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/40">
+          {TEMPLATES.length} self-contained scenes. Each one is a full-viewport page you can
+          lift into a project on its own.
+        </p>
+      </header>
+
+      <div className="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {TEMPLATES.map(({ slug, name, tagline, accent }) => (
           <Link
-            key={s.num}
-            to={`/screen/${s.num}`}
-            style={{
-              padding: '18px 36px',
-              background: '#222',
-              color: '#fff',
-              borderRadius: 10,
-              fontSize: 20,
-              fontWeight: 700,
-              textDecoration: 'none',
-              boxShadow: '0 2px 12px #0007',
-              transition: 'background 0.2s',
-              display: 'inline-block',
-            }}
+            key={slug}
+            to={`/t/${slug}`}
+            className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-6 no-underline transition-all duration-300 hover:-translate-y-1 hover:border-white/25 hover:bg-white/[0.06]"
           >
-            {s.label}
+            <span
+              className="absolute inset-x-0 top-0 h-px opacity-40 transition-opacity duration-300 group-hover:opacity-100"
+              style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)` }}
+            />
+            <span
+              className="mb-5 block h-2 w-2 rounded-full transition-all duration-300 group-hover:scale-150"
+              style={{ backgroundColor: accent, boxShadow: `0 0 12px ${accent}` }}
+            />
+            <h2 className="m-0 text-lg font-bold tracking-tight text-white">{name}</h2>
+            <p className="mt-1.5 text-xs leading-relaxed text-white/35">{tagline}</p>
+            <span className="mt-6 block font-mono text-[9px] uppercase tracking-[0.3em] text-white/20">
+              /t/{slug}
+            </span>
           </Link>
         ))}
       </div>
-      <BackButton to={-1} label="Back" />
     </div>
   );
 }

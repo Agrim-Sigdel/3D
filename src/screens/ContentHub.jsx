@@ -253,7 +253,7 @@ export default function App() {
     };
 
     return (
-        <div className="fixed inset-0 bg-[#01080e] overflow-hidden font-sans text-white select-none">
+        <div className="content-hub fixed inset-0 bg-[#01080e] overflow-hidden font-sans text-white select-none">
             <BackButton />
             
             {/* 3D Render Layer */}
@@ -454,14 +454,7 @@ export default function App() {
             </AnimatePresence>
 
             <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;700;900&display=swap');
-                
-                body {
-                    margin: 0;
-                    padding: 0;
-                    background: #01080e;
-                    font-family: 'Inter', sans-serif;
-                }
+                .content-hub { font-family: 'Inter', sans-serif; }
 
                 ::-webkit-scrollbar {
                     width: 4px;
