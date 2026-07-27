@@ -41,9 +41,15 @@ const GENERATED_NODES = Array.from({ length: NODE_COUNT }).map((_, i) => {
             (Math.random() - 0.5) * 100
         ),
         baseRotation: new THREE.Vector3(Math.random(), Math.random(), Math.random()),
-        speedMult: 0.5 + Math.random() * 0.8
+        speedMult: 0.5 + Math.random() * 0.8,
+        // Rolled once per node. Generating this in the detail panel would
+        // reshuffle the readout on every re-render.
+        massIndex: (Math.random() * 900 + 100).toFixed(2)
     };
 });
+
+// Decorative telemetry: stable for the session rather than per-render.
+const MEM_ALLOC = Math.floor(Math.random() * 40 + 60);
 
 // Adjusted Volumetric Nebula Shader
 const NebulaShader = {
@@ -144,6 +150,9 @@ export default function App() {
     };
 
     useEffect(() => {
+        const mount = mountRef.current;
+        if (!mount) return;
+
         const w = window.innerWidth;
         const h = window.innerHeight;
 
@@ -158,7 +167,7 @@ export default function App() {
         // Add subtle tone mapping for better glow handling
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.toneMappingExposure = 1.2;
-        mountRef.current.appendChild(renderer.domElement);
+        mount.appendChild(renderer.domElement);
 
         // --- LIGHTING ---
         scene.add(new THREE.AmbientLight(0xffffff, 0.1));
@@ -507,8 +516,14 @@ export default function App() {
             window.removeEventListener('wheel', onWheel);
             window.removeEventListener('click', onClick);
             window.removeEventListener('resize', onResize);
+            scene.traverse((obj) => {
+                if (obj.geometry) obj.geometry.dispose();
+                if (obj.material) {
+                    (Array.isArray(obj.material) ? obj.material : [obj.material]).forEach(m => m.dispose());
+                }
+            });
             renderer.dispose();
-            if (mountRef.current) mountRef.current.innerHTML = '';
+            renderer.domElement.remove();
         };
     }, []);
 
@@ -642,7 +657,7 @@ export default function App() {
                                         <div className="grid grid-cols-2 gap-4 pt-4">
                                             <div className="bg-black/50 border border-white/5 p-4 rounded">
                                                 <div className="text-[9px] font-mono text-white/40 mb-2">MASS_INDEX</div>
-                                                <div className="text-xl font-mono text-cyan-300">{(Math.random() * 900 + 100).toFixed(2)} YT</div>
+                                                <div className="text-xl font-mono text-cyan-300">{activeNodeData.massIndex} YT</div>
                                             </div>
                                             <div className="bg-black/50 border border-white/5 p-4 rounded">
                                                 <div className="text-[9px] font-mono text-white/40 mb-2">RAD_SIGNATURE</div>
@@ -688,7 +703,7 @@ export default function App() {
                     {/* Decorative Data Stream */}
                     <div className="hidden md:flex flex-col items-end gap-1 ml-auto text-[8px] font-mono text-cyan-500/30 text-right opacity-50">
                         <div>SYS.CORE.OP // NOMINAL</div>
-                        <div>MEM.ALLOC // {Math.floor(Math.random() * 40 + 60)}%</div>
+                        <div>MEM.ALLOC // {MEM_ALLOC}%</div>
                         <div>UPLINK // SECURE_CHANNEL_8</div>
                     </div>
                 </footer>

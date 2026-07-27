@@ -82,6 +82,9 @@ export default function App() {
     const togglePlay = () => setIsPlaying(!isPlaying);
 
     useEffect(() => {
+        const mount = mountRef.current;
+        if (!mount) return;
+
         const width = window.innerWidth;
         const height = window.innerHeight;
 
@@ -93,7 +96,7 @@ export default function App() {
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(width, height);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        mountRef.current.appendChild(renderer.domElement);
+        mount.appendChild(renderer.domElement);
 
         scene.add(new THREE.AmbientLight(0xff6600, 0.3));
         const sun = new THREE.DirectionalLight(0xffffff, 1.0);
@@ -347,8 +350,14 @@ export default function App() {
             window.removeEventListener('click', onClick);
             window.removeEventListener('keydown', onKeyDown);
             window.removeEventListener('resize', onResize);
+            scene.traverse((obj) => {
+                if (obj.geometry) obj.geometry.dispose();
+                if (obj.material) {
+                    (Array.isArray(obj.material) ? obj.material : [obj.material]).forEach(m => m.dispose());
+                }
+            });
             renderer.dispose();
-            if (mountRef.current) mountRef.current.innerHTML = '';
+            renderer.domElement.remove();
         };
     }, []);
 
@@ -392,6 +401,7 @@ export default function App() {
                     
                     <div className="flex flex-col gap-3 bg-black/40 backdrop-blur-3xl p-2.5 rounded-full border border-white/10 shadow-2xl">
                         <button onClick={() => adjustZoom(-30)} className="w-11 h-11 flex items-center justify-center hover:bg-orange-600/60 rounded-full transition-all text-xl font-light border border-transparent hover:border-orange-400">+</button>
+                        <div className="w-11 text-center font-mono text-[9px] tabular-nums text-white/40">{Math.round(zoomLevel)}</div>
                         <button onClick={() => { sceneState.current.targetZoom = 300; setZoomLevel(300); }} className="w-11 h-11 flex items-center justify-center hover:bg-white/10 rounded-full transition-all text-[8px] font-black tracking-tighter">MAX</button>
                         <button onClick={() => adjustZoom(30)} className="w-11 h-11 flex items-center justify-center hover:bg-orange-600/60 rounded-full transition-all text-xl font-light border border-transparent hover:border-orange-400">−</button>
                     </div>

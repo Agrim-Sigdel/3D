@@ -50,7 +50,11 @@ const GENERATED_NODES = Array.from({ length: NODE_COUNT }).map((_, i) => {
             (Math.random() - 0.5) * 150
         ),
         baseRotation: new THREE.Vector3(Math.random(), Math.random(), Math.random()),
-        speedMult: 0.4 + Math.random() * 0.6
+        speedMult: 0.4 + Math.random() * 0.6,
+        // Rolled once per node. Generating these in the detail card would
+        // reshuffle the readout on every re-render.
+        luminosity: (Math.random() * 100 + 40).toFixed(1),
+        massDensity: (Math.random() * 5 + 1).toFixed(2)
     };
 });
 
@@ -140,6 +144,9 @@ export default function App() {
     };
 
     useEffect(() => {
+        const mount = mountRef.current;
+        if (!mount) return;
+
         const w = window.innerWidth;
         const h = window.innerHeight;
 
@@ -153,7 +160,7 @@ export default function App() {
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.toneMapping = THREE.ReinhardToneMapping;
         renderer.toneMappingExposure = 2.0;
-        mountRef.current.appendChild(renderer.domElement);
+        mount.appendChild(renderer.domElement);
 
         scene.add(new THREE.AmbientLight(0xffffff, 0.1));
         
@@ -374,7 +381,6 @@ export default function App() {
         const onMouseUp = () => { sceneState.current.isDragging = false; };
         
         const onWheel = (e) => {
-            const st = sceneState.current;
             if (e.ctrlKey || e.metaKey || e.shiftKey) { e.preventDefault(); handleZoom(e.deltaY * 0.5); return; }
         };
 
@@ -395,8 +401,14 @@ export default function App() {
             window.removeEventListener('mouseup', onMouseUp);
             window.removeEventListener('wheel', onWheel);
             window.removeEventListener('resize', onResize);
+            scene.traverse((obj) => {
+                if (obj.geometry) obj.geometry.dispose();
+                if (obj.material) {
+                    (Array.isArray(obj.material) ? obj.material : [obj.material]).forEach(m => m.dispose());
+                }
+            });
             renderer.dispose();
-            if (mountRef.current) mountRef.current.innerHTML = '';
+            renderer.domElement.remove();
         };
     }, []);
 
@@ -481,8 +493,8 @@ export default function App() {
                                         <div className="grid grid-cols-2 gap-6">
                                             {[
                                                 { label: "Spectral Class", val: "Type-Σ Crystal" },
-                                                { label: "Luminosity", val: (Math.random() * 100 + 40).toFixed(1) + " L☉" },
-                                                { label: "Mass Density", val: (Math.random() * 5 + 1).toFixed(2) + " ρ/cm³" },
+                                                { label: "Luminosity", val: `${activeNodeData.luminosity} L☉` },
+                                                { label: "Mass Density", val: `${activeNodeData.massDensity} ρ/cm³` },
                                                 { label: "Temp (Core)", val: "18,400 K" }
                                             ].map((stat, idx) => (
                                                 <div key={idx} className="bg-white/5 p-5 rounded-3xl border border-white/5">

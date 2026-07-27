@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import BackButton from './BackButton';
 import * as THREE from 'three';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -93,7 +93,19 @@ export default function App() {
         scene: null
     });
 
-    const initScene = useCallback(() => {
+    // The render loop reads these rather than closing over state, so the scene
+    // is built once instead of being torn down and rebuilt on every keypress.
+    const activeIdxRef = useRef(activeIdx);
+    const currentPageRef = useRef(currentPage);
+    useEffect(() => {
+        activeIdxRef.current = activeIdx;
+        currentPageRef.current = currentPage;
+    }, [activeIdx, currentPage]);
+
+    useEffect(() => {
+        const mount = mountRef.current;
+        if (!mount) return;
+
         const width = window.innerWidth;
         const height = window.innerHeight;
 
@@ -107,7 +119,7 @@ export default function App() {
         const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
         renderer.setSize(width, height);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        mountRef.current.appendChild(renderer.domElement);
+        mount.appendChild(renderer.domElement);
 
         // Lights
         const ambient = new THREE.AmbientLight(0x404040, 0.5);
@@ -136,7 +148,7 @@ export default function App() {
         scene.add(particles);
 
         // Podium Construction
-        const podiums = MODULES.map((mod, i) => {
+        const podiums = MODULES.map((mod) => {
             const group = new THREE.Group();
             group.position.set(mod.x, -4, mod.z);
 
@@ -175,14 +187,20 @@ export default function App() {
 
         sceneState.current = { ...sceneState.current, scene, camera, renderer, podiums, particles };
 
+        let frameId;
         const animate = () => {
-            const frame = requestAnimationFrame(animate);
+            frameId = requestAnimationFrame(animate);
+
+            // Sub-pages cover the canvas completely; don't burn GPU behind them.
+            if (currentPageRef.current !== 'hub') return;
+
             const time = sceneState.current.clock.getElapsedTime();
+            const currentIdx = activeIdxRef.current;
 
             // Smoothly move target X based on active index
             sceneState.current.currentX = THREE.MathUtils.lerp(
-                sceneState.current.currentX, 
-                MODULES[activeIdx].x, 
+                sceneState.current.currentX,
+                MODULES[currentIdx].x,
                 0.05
             );
 
@@ -193,7 +211,7 @@ export default function App() {
 
             // Animate Podium Elements
             podiums.forEach((p, i) => {
-                const isHovered = i === activeIdx;
+                const isHovered = i === currentIdx;
                 const scale = isHovered ? 1.2 : 0.8;
                 p.group.scale.lerp(new THREE.Vector3(scale, scale, scale), 0.1);
                 
@@ -229,14 +247,18 @@ export default function App() {
         return () => {
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('mousemove', handleMouseMove);
-            cancelAnimationFrame(animate);
-            renderer.dispose();
-        };
-    }, [activeIdx]);
+            cancelAnimationFrame(frameId);
 
-    useEffect(() => {
-        if (currentPage === 'hub') return initScene();
-    }, [currentPage, initScene]);
+            scene.traverse((obj) => {
+                if (obj.geometry) obj.geometry.dispose();
+                if (obj.material) {
+                    (Array.isArray(obj.material) ? obj.material : [obj.material]).forEach(m => m.dispose());
+                }
+            });
+            renderer.dispose();
+            renderer.domElement.remove();
+        };
+    }, []);
 
     const navigate = (dir) => {
         if (isTransitioning) return;
