@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import BackButton from './BackButton';
+import { PROFILE, ROLES, STACK, PROJECTS, formatCoordinates } from '../data/portfolio.js';
 import * as THREE from 'three';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -293,7 +294,7 @@ export default function App() {
                         {/* Header */}
                         <div className="flex justify-between items-start">
                             <div className="pointer-events-auto">
-                                <h1 className="text-3xl font-black tracking-[0.3em] opacity-80">AGRIM SIGDEL</h1>
+                                <h1 className="text-3xl font-black tracking-[0.3em] opacity-80">{PROFILE.name.toUpperCase()}</h1>
                                 <div className="flex items-center gap-2 mt-2">
                                     <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#00f2ff]"></div>
                                     <span className="text-[10px] font-mono tracking-widest text-cyan-400/60 uppercase">System Active // Core_Node_01</span>
@@ -301,7 +302,7 @@ export default function App() {
                             </div>
                             <div className="text-right font-mono text-[10px] opacity-30">
                                 PERSPECTIVE_RENDER_ENGINE_V4<br/>
-                                LAT: 27.7172 | LNG: 85.3240
+                                {formatCoordinates()}
                             </div>
                         </div>
 
@@ -381,10 +382,9 @@ export default function App() {
                                         <span className="w-2 h-2 bg-green-500 rounded-full"></span> CORE_TECH_STACK
                                     </h3>
                                     <div className="space-y-2 text-xs opacity-60">
-                                        <p>&gt; React / Next.js / TypeScript</p>
-                                        <p>&gt; Python / Django / FastAPI</p>
-                                        <p>&gt; PyTorch / YOLOv8 / OpenCV</p>
-                                        <p>&gt; PostgreSQL / Redis / Docker</p>
+                                        {STACK.map(item => (
+                                            <p key={item}>&gt; {item}</p>
+                                        ))}
                                     </div>
                                 </div>
                                 <div className="p-8 border border-white/5 bg-white/[0.02] rounded-3xl">
@@ -392,14 +392,12 @@ export default function App() {
                                         <span className="w-2 h-2 bg-blue-500 rounded-full"></span> PROJECT_DEPLOYMENTS
                                     </h3>
                                     <ul className="space-y-4">
-                                        <li>
-                                            <div className="font-bold">ANPR_v2.0</div>
-                                            <div className="text-[10px] opacity-40">Automated number plate recognition with 98% accuracy.</div>
-                                        </li>
-                                        <li>
-                                            <div className="font-bold">SENTIMENT_ANALYSIS_ENGINE</div>
-                                            <div className="text-[10px] opacity-40">NLP model processing 5k requests/min.</div>
-                                        </li>
+                                        {PROJECTS.map(project => (
+                                            <li key={project.name}>
+                                                <div className="font-bold">{project.name}</div>
+                                                <div className="text-[10px] opacity-40">{project.blurb}</div>
+                                            </li>
+                                        ))}
                                     </ul>
                                 </div>
                             </div>
@@ -410,26 +408,26 @@ export default function App() {
                 {currentPage === 'normal' && (
                     <PageWrapper onBack={() => setCurrentPage('hub')} bg="bg-white text-black">
                         <div className="max-w-4xl mx-auto py-24 px-8">
-                            <h2 className="text-8xl font-black mb-12 tracking-tighter">Agrim.</h2>
+                            <h2 className="text-8xl font-black mb-12 tracking-tighter">
+                                {PROFILE.name.split(' ')[0]}.
+                            </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-24">
                                 <div>
-                                    <p className="text-2xl font-light leading-relaxed mb-12">
-                                        A developer focused on building <span className="font-bold">intelligent systems</span> that feel like magic.
-                                    </p>
+                                    <p className="text-2xl font-light leading-relaxed mb-12">{PROFILE.tagline}</p>
                                     <div className="space-y-8">
-                                        <div>
-                                            <h4 className="text-xs font-bold uppercase tracking-widest text-black/30 mb-2">Currently</h4>
-                                            <p className="font-medium">Full-Stack Developer @ Kingsoft Tech</p>
-                                        </div>
-                                        <div>
-                                            <h4 className="text-xs font-bold uppercase tracking-widest text-black/30 mb-2">Previously</h4>
-                                            <p className="font-medium">Creative Lead @ Prime College</p>
-                                        </div>
+                                        {ROLES.map(role => (
+                                            <div key={role.label}>
+                                                <h4 className="text-xs font-bold uppercase tracking-widest text-black/30 mb-2">{role.label}</h4>
+                                                <p className="font-medium">{role.title} @ {role.org}</p>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                                 <div className="flex flex-col justify-end">
                                     <div className="h-[1px] bg-black/10 w-full mb-8"></div>
-                                    <p className="text-sm text-black/50">Based in Kathmandu, Nepal. Working worldwide.</p>
+                                    <p className="text-sm text-black/50">
+                                        Based in {PROFILE.location}. {PROFILE.availability}.
+                                    </p>
                                 </div>
                             </div>
                         </div>

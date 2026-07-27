@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import BackButton from './BackButton';
+import { PROFILE, formatCoordinates } from '../data/portfolio.js';
 import * as THREE from 'three';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -512,7 +513,7 @@ export default function PodiumHud({ theme: themeName = 'dark', podium: initialPo
                 <div className="top-nav">
                     <motion.div className="header-hud" initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }}>
                         <span className="brand-label">OPERATING SYSTEM</span>
-                        <h1>AGRIM SIGDEL v3.5</h1>
+                        <h1>{PROFILE.name.toUpperCase()} v3.5</h1>
                         <div className="header-line" />
                     </motion.div>
 
@@ -565,7 +566,7 @@ export default function PodiumHud({ theme: themeName = 'dark', podium: initialPo
 
                 <div className="footer-hud">
                     <div className="sys-log">
-                        <div>NET_UP: 27.6710°N 85.3414°E</div>
+                        <div>NET_UP: {formatCoordinates()}</div>
                         <div className="status-blink">
                             <span className="dot" /> MODE: {podium.toUpperCase()}
                         </div>
