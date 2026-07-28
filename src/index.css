@@ -4,6 +4,111 @@
   --font-manrope: 'Manrope', ui-sans-serif, system-ui, sans-serif;
   --font-epilogue: 'Epilogue', ui-sans-serif, system-ui, sans-serif;
   --font-orbitron: 'Orbitron', ui-sans-serif, system-ui, sans-serif;
+
+  /* Faces used by the templates in ./screens/website. Named after the typeface
+   * rather than the template, since several designs share one. */
+  --font-inter: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-almarai: 'Almarai', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  --font-geist: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-kanit: 'Kanit', ui-sans-serif, system-ui, sans-serif;
+  --font-instrument-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+  --font-special-elite: 'Special Elite', ui-serif, Georgia, serif;
+  --font-basis33: 'basis33', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-playfair: 'Playfair Display', ui-serif, Georgia, serif;
+  --font-barlow: 'Barlow', ui-sans-serif, system-ui, sans-serif;
+  --font-anton: 'Anton', ui-sans-serif, system-ui, sans-serif;
+  --font-condiment: 'Condiment', ui-serif, cursive;
+  --font-readex: 'Readex Pro', ui-sans-serif, system-ui, sans-serif;
+  --font-cormorant: 'Cormorant Garamond', ui-serif, Georgia, serif;
+  --font-jakarta: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-outfit: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+
+  /* Palette tokens are prefixed with their template. Tailwind 4 has no
+   * per-file config, so a bare `--color-primary` would be visible to every
+   * other screen in the library. */
+  /* Measured steps its hero type at 480px, below Tailwind's smallest default. */
+  --breakpoint-xs: 30rem;
+
+  --color-prisma-primary: #dedbc8;
+  --color-wandor-dark: #0a0a0a;
+  --color-wandor-text: #1a1a1a;
+  --color-wandor-muted: #767676;
+  --color-wandor-prompt: #905831;
+
+  --color-lithos-clay: #e8702a;
+  --color-lithos-clay-dark: #d2611f;
+
+  --color-orbis-ink: #010828;
+  --color-orbis-cream: #eff4ff;
+  --color-orbis-neon: #6fff00;
+
+  --color-axion-orange: #f26522;
+  --color-axion-orange-dark: #e05a1a;
+  --color-axion-copper: #e8704e;
+
+  /* Michael Smith's design system is a set of HSL channel triples so opacity
+   * modifiers still work; Tailwind 4 wraps the raw channels itself. */
+  --color-smith-bg: hsl(0 0% 4%);
+  --color-smith-surface: hsl(0 0% 8%);
+  --color-smith-text: hsl(0 0% 96%);
+  --color-smith-muted: hsl(0 0% 53%);
+  --color-smith-stroke: hsl(0 0% 12%);
+
+  --color-coinwise-bg: #fafafa;
+  --color-coinwise-primary: #0f172a;
+  --color-coinwise-secondary: #64748b;
+  --color-coinwise-accent: #d4af37;
+  --color-coinwise-accent-dark: #c58528;
+
+  --color-skyline-bg: #0c1128;
+  --color-skyline-blue: #00f0ff;
+  --color-skyline-purple: #b026ff;
+
+  --color-outbox-orange: #f24d29;
+  --color-outbox-dark: #c63d25;
+  --color-outbox-darker: #963222;
+  --color-outbox-darkest: #691c10;
+
+  /* Wander Gear. Prefixed `gear-` rather than `wander-` on purpose: Wandor
+   * already owns `--color-wandor-*` above, and two palettes one letter apart
+   * would let a typo silently resolve to the other template's colour. Same
+   * reasoning as the `axion-studio` slug in src/templates.js. */
+  --color-gear-bg: #f3efe8;
+  --color-gear-blue: #7bb5cc;
+  --color-gear-orange: #d9772b;
+  --color-gear-dark: #1f3d47;
+  --color-gear-text: #2a3b45;
+
+  --color-mindful-gold: #e2b05c;
+  --color-mindful-teal: #3ba4ab;
+
+  /* Aluma. The only palette here assembled for a brief rather than from one —
+   * see src/data/aluma.json, which holds everything else that template says. */
+  --color-aluma-mist: #f2f0ea;
+  --color-aluma-ink: #1b2b2a;
+  --color-aluma-water: #3c6e6a;
+  --color-aluma-brass: #b08d4f;
+  --color-aluma-stone: #7b7a72;
+
+  --color-basilico-ink: #070707;
+  --color-basilico-gold: #d9a35f;
+  --color-basilico-orange: #c97a2b;
+  --color-basilico-warm: #bdbdbd;
+
+  /* Marlowe & Hale. Deliberately not Basilico: that palette is the other
+   * near-black-and-gold template here, and without separation this one reads as
+   * a re-skin of it. `jet` is colder than `basilico-ink`, `gold` is a flatter
+   * leaf gold rather than Basilico's warm orange-leaning one, and `chalk` is a
+   * second *ground* — half the sections invert onto it, which Basilico never
+   * does. `claret` is the jacket-lining accent and is used three times in the
+   * whole template; more than that and it stops being a lining. */
+  --color-marlowe-jet: #0b0b0d;
+  --color-marlowe-coal: #15151a;
+  --color-marlowe-chalk: #e8e3d7;
+  --color-marlowe-gold: #c0a05a;
+  --color-marlowe-claret: #5c2028;
+  --color-marlowe-stone: #8c877d;
 }
 
 /*
@@ -26,4 +131,724 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+
+/* ---------------------------------------------------------------------------
+ * Website template support
+ *
+ * Everything below belongs to ./screens/website. Each of those designs was
+ * specified as its own standalone app with a global `* { font-family }` reset
+ * and its own body background; here they share one document, so the font
+ * resets are scoped to a class the template puts on its root wrapper. Buttons
+ * and inputs don't inherit font-family from an ancestor, which is why these
+ * need the `*` rather than a plain declaration.
+ * ------------------------------------------------------------------------- */
+
+.type-inter,
+.type-inter * {
+  font-family: var(--font-inter);
+}
+
+.type-almarai,
+.type-almarai * {
+  font-family: var(--font-almarai);
+}
+
+.type-geist,
+.type-geist * {
+  font-family: var(--font-geist);
+}
+
+.type-kanit,
+.type-kanit * {
+  font-family: var(--font-kanit);
+}
+
+.type-barlow,
+.type-barlow * {
+  font-family: var(--font-barlow);
+}
+
+.type-readex,
+.type-readex * {
+  font-family: var(--font-readex);
+}
+
+.type-jakarta,
+.type-jakarta * {
+  font-family: var(--font-jakarta);
+}
+
+.type-outfit,
+.type-outfit * {
+  font-family: var(--font-outfit);
+}
+
+/*
+ * basis33 — the bitmap face Adam Roberts sets its pixel words in. Self-hosted
+ * from public/assets/fonts rather than requested from the font CDN the spec
+ * names, so the page has no third-party dependency at runtime.
+ */
+@font-face {
+  font-family: 'basis33';
+  src:
+    url('/assets/fonts/basis33.woff2') format('woff2'),
+    url('/assets/fonts/basis33.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/*
+ * Escape hatches out of a `.type-*` scope.
+ *
+ * A scope's `* { }` and a bare utility class both score (0,1,0), so source
+ * order decides — which is why every one of these must stay *below* the scope
+ * blocks above. Adding a scope needs no change here.
+ */
+.font-serif-accent {
+  font-family: var(--font-instrument-serif);
+}
+
+.font-display {
+  font-family: var(--font-special-elite);
+}
+
+.font-pixel {
+  font-family: var(--font-basis33);
+}
+
+.font-playfair {
+  font-family: var(--font-playfair);
+}
+
+.font-barlow {
+  font-family: var(--font-barlow);
+}
+
+.font-anton {
+  font-family: var(--font-anton);
+}
+
+.font-condiment {
+  font-family: var(--font-condiment);
+}
+
+.font-cormorant {
+  font-family: var(--font-cormorant);
+}
+
+.font-outfit {
+  font-family: var(--font-outfit);
+}
+
+/*
+ * Measured asks for self-hosted Helvetica Neue Roman in /public/fonts. Those
+ * files aren't in the repo, so this resolves the face from the system where it
+ * exists (macOS) and falls through to the stack everywhere else instead of
+ * requesting a 404.
+ */
+@font-face {
+  font-family: 'Helvetica Neue Roman';
+  src: local('Helvetica Neue'), local('HelveticaNeue'), local('Helvetica');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-helvetica-neue {
+  font-family: 'Helvetica Neue Roman', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Jack — gradient-filled display heading. */
+.hero-heading {
+  background: linear-gradient(180deg, #646973 0%, #bbccd7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/*
+ * Prisma — two grain textures built from feTurbulence. `.noise-overlay` is the
+ * coarser one that sits on the hero video under `mix-blend-overlay`;
+ * `.bg-noise` is the finer wash behind the features grid.
+ */
+.noise-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n2)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/*
+ * Frosted chrome. The ::before draws a gradient *border only* via the
+ * mask-composite trick: two solid masks, one clipped to the content box, xor'd
+ * so just the 1.4px padding ring survives.
+ *
+ * These live in `@layer components` — unlike the font scopes above, which are
+ * deliberately unlayered — because they are routinely combined with utilities
+ * that set the same properties, and an unlayered rule beats every layered one
+ * no matter how specific. Outside the layer, `position: relative` here silently
+ * defeats `absolute`, `border: none` defeats `border-white/20`, and the flat
+ * `background` defeats `hover:bg-white/10`. Inside it, the utility wins, which
+ * is what every call site is written to expect.
+ */
+@layer components {
+  .liquid-glass {
+    background: rgba(255, 255, 255, 0.01);
+    background-blend-mode: luminosity;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: none;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .liquid-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.4px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0.15) 20%,
+      rgba(255, 255, 255, 0) 40%,
+      rgba(255, 255, 255, 0) 60%,
+      rgba(255, 255, 255, 0.15) 80%,
+      rgba(255, 255, 255, 0.45) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /*
+   * Two more glass weights. The ::before border trick is identical in all three;
+   * only the fill, the blur radius and the gradient's end stops change.
+   *
+   *   .liquid-glass         Measured, Asme, Know It All, Orbis, Aster chrome
+   *   .liquid-glass-dark    Vex — a near-opaque black fill, for white text on a
+   *                         bright video where a 1% white fill reads as nothing
+   *   .liquid-glass-strong  Aster's primary CTA — heavy blur, brighter edge
+   */
+  .liquid-glass-dark {
+    background: rgba(0, 0, 0, 0.4);
+    background-blend-mode: luminosity;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: none;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .liquid-glass-strong {
+    background: rgba(255, 255, 255, 0.01);
+    background-blend-mode: luminosity;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border: none;
+    box-shadow:
+    4px 4px 4px rgba(0, 0, 0, 0.05),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .liquid-glass-dark::before,
+  .liquid-glass-strong::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.4px;
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .liquid-glass-dark::before {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(255, 255, 255, 0.1) 20%,
+      rgba(255, 255, 255, 0) 40%,
+      rgba(255, 255, 255, 0) 60%,
+      rgba(255, 255, 255, 0.1) 80%,
+      rgba(255, 255, 255, 0.3) 100%
+    );
+  }
+
+  .liquid-glass-strong::before {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0.2) 20%,
+      rgba(255, 255, 255, 0) 40%,
+      rgba(255, 255, 255, 0) 60%,
+      rgba(255, 255, 255, 0.2) 80%,
+      rgba(255, 255, 255, 0.5) 100%
+    );
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Lithos — on-load entrance. A blur-rise for the two heading lines, a plain
+ * fade-up for the corner copy, and a slow Ken Burns pull-back on the base
+ * image. `.hero-anim` holds the shared opacity:0 start so each variant only
+ * has to name its keyframes.
+ * ------------------------------------------------------------------------- */
+@keyframes heroReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(28px);
+    filter: blur(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes heroFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroZoom {
+  0% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.hero-anim {
+  opacity: 0;
+  animation-fill-mode: forwards;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-reveal {
+  animation-name: heroReveal;
+  animation-duration: 1.1s;
+}
+
+.hero-fade {
+  animation-name: heroFadeUp;
+  animation-duration: 1s;
+}
+
+.hero-zoom {
+  animation: heroZoom 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ---------------------------------------------------------------------------
+ * VortxLab — staggered entrance, plus the octagonal button silhouette. The
+ * outline variant fakes a border by stacking a black ::before one pixel inside
+ * a white parent, since clip-path crops a real border away.
+ * ------------------------------------------------------------------------- */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.anim-stagger {
+  opacity: 0;
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.anim-fade {
+  opacity: 0;
+  animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.btn-cut {
+  clip-path: polygon(
+    12px 0%,
+    calc(100% - 12px) 0%,
+    100% 12px,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    12px 100%,
+    0% calc(100% - 12px),
+    0% 12px
+  );
+}
+
+.btn-cut-border {
+  position: relative;
+  background: white;
+  clip-path: polygon(
+    12px 0%,
+    calc(100% - 12px) 0%,
+    100% 12px,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    12px 100%,
+    0% calc(100% - 12px),
+    0% 12px
+  );
+}
+
+.btn-cut-border::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  background: black;
+  z-index: 0;
+  clip-path: polygon(
+    11px 0%,
+    calc(100% - 11px) 0%,
+    100% 11px,
+    100% calc(100% - 11px),
+    calc(100% - 11px) 100%,
+    11px 100%,
+    0% calc(100% - 11px),
+    0% 11px
+  );
+}
+
+.btn-cut-border > * {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-cut-sm {
+  clip-path: polygon(
+    8px 0%,
+    calc(100% - 8px) 0%,
+    100% 8px,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    8px 100%,
+    0% calc(100% - 8px),
+    0% 8px
+  );
+}
+
+/* ---------------------------------------------------------------------------
+ * Michael Smith — one accent gradient reused on the logo ring, hover borders
+ * and the loader bar, plus three loops: the travelling scroll hint, the role
+ * word swap, and the drifting gradient on animated borders.
+ * ------------------------------------------------------------------------- */
+.accent-gradient {
+  background: linear-gradient(90deg, #89aacc 0%, #4e85bf 100%);
+}
+
+@keyframes scroll-down {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(200%);
+  }
+}
+
+@keyframes role-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-scroll-down {
+  animation: scroll-down 1.5s ease-in-out infinite;
+}
+
+.animate-role-fade-in {
+  animation: role-fade-in 0.4s ease-out;
+}
+
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradient-shift 6s ease infinite;
+}
+
+/*
+ * NaturaVista — the dot inside the scroll-hint mouse pill. Distinct from
+ * `scroll-down` above, which travels a Michael Smith rail end to end; this one
+ * dips 8px and returns, dimming at the bottom of the stroke.
+ */
+@keyframes scroll-dot {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-scroll-dot {
+  animation: scroll-dot 2s infinite;
+}
+
+/*
+ * `./screens/website/shared/Ticker` — the time-driven marquee.
+ *
+ * CSS rather than Framer, and the reason is `animation-play-state`. Pausing a
+ * Framer repeat means stopping the animation and restarting it, which either
+ * jumps or loses its position; one CSS property freezes the track exactly where
+ * it is and resumes from there. That is what `.ticker-pausable` is for.
+ *
+ * The track holds two copies of its content and travels exactly -50%, so when
+ * the first copy has left, the second sits precisely where the first began and
+ * the reset is invisible. Duration comes in as `--ticker-duration` so the
+ * component can keep it a prop.
+ */
+@keyframes ticker-left {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes ticker-right {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-ticker-left {
+  animation: ticker-left var(--ticker-duration, 40s) linear infinite;
+}
+
+.animate-ticker-right {
+  animation: ticker-right var(--ticker-duration, 40s) linear infinite;
+}
+
+/* Hover on the container, not the track — the track is wider than the frame. */
+.ticker-pausable:hover .animate-ticker-left,
+.ticker-pausable:hover .animate-ticker-right {
+  animation-play-state: paused;
+}
+
+/*
+ * Scrollable popovers — `./screens/website/shared/Select` and anything else
+ * that overflows inside its own panel.
+ *
+ * A default scrollbar inside a custom listbox undoes the point of having built
+ * one: it is the widest, greyest, most operating-system thing on the panel.
+ * `scrollbar-width`/`scrollbar-color` covers Firefox, the `::-webkit-` pair
+ * covers everything else, and both resolve `currentColor` so the bar inherits
+ * whatever the menu is set in rather than needing a per-template variant.
+ */
+.ui-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, currentColor 25%, transparent) transparent;
+}
+
+.ui-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.ui-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ui-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, currentColor 25%, transparent);
+  border-radius: 999px;
+}
+
+.ui-scroll::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, currentColor 40%, transparent);
+}
+
+/* Securify — its three headline words are set tight enough to overlap. */
+.hero-title {
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+/*
+ * Woven cloth, drawn rather than photographed.
+ *
+ * Written for `marlowe`, which is a bespoke tailor with no photography — but
+ * unprefixed and kept here rather than in that template, because a suiting
+ * pattern is not one design's decoration. A chalkstripe is two colours and a
+ * rhythm; a herringbone is a zigzag twill; a birdseye is a dot lattice. At
+ * swatch scale these are not approximations of cloth, they are how cloth is
+ * specified in a mill's pattern book, which is why the drawn version reads as
+ * the real thing where a cropped photograph of the wrong subject would not.
+ *
+ * Every stop is `color-mix(… currentColor …)`, the same trick `.ui-scroll`
+ * uses above: one class set covers a dark ground and a light one, because the
+ * weave inherits whatever the element is set in. `text-marlowe-gold/40
+ * weave-herringbone` is a gold herringbone; `text-white/10 weave-chalkstripe`
+ * is a ghost one. No per-template variants, no palette baked in.
+ *
+ * In `@layer components` on purpose: they set `background-image`, and a call
+ * site that wants a gradient over the top must be able to win with a utility.
+ * Static, so `prefers-reduced-motion` has nothing to say about them.
+ */
+.weave-herringbone {
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      color-mix(in srgb, currentColor 14%, transparent) 0 1px,
+      transparent 1px 6px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      color-mix(in srgb, currentColor 14%, transparent) 0 1px,
+      transparent 1px 6px
+    );
+  background-size: 12px 12px;
+}
+
+.weave-chalkstripe {
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      color-mix(in srgb, currentColor 22%, transparent) 0 1px,
+      transparent 1px 16px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      color-mix(in srgb, currentColor 6%, transparent) 0 1px,
+      transparent 1px 4px
+    );
+}
+
+.weave-birdseye {
+  background-image: radial-gradient(
+    color-mix(in srgb, currentColor 20%, transparent) 1px,
+    transparent 1.4px
+  );
+  background-size: 7px 7px;
+}
+
+.weave-glencheck {
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      color-mix(in srgb, currentColor 16%, transparent) 0 2px,
+      transparent 2px 5px,
+      color-mix(in srgb, currentColor 9%, transparent) 5px 7px,
+      transparent 7px 16px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      color-mix(in srgb, currentColor 16%, transparent) 0 2px,
+      transparent 2px 5px,
+      color-mix(in srgb, currentColor 9%, transparent) 5px 7px,
+      transparent 7px 16px
+    );
+}
+
+.weave-hopsack {
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      color-mix(in srgb, currentColor 15%, transparent) 0 4px,
+      transparent 4px 8px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      color-mix(in srgb, currentColor 15%, transparent) 0 4px,
+      transparent 4px 8px
+    );
+}
+
+.weave-twill {
+  background-image: repeating-linear-gradient(
+    60deg,
+    color-mix(in srgb, currentColor 13%, transparent) 0 1px,
+    transparent 1px 5px
+  );
+}
+
+/*
+ * Every entrance above is decorative, so drop the lot when the visitor asks for
+ * less motion. The looping ones stop too — a permanent 1.5s cycle is the worst
+ * offender on that setting.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .hero-anim,
+  .hero-zoom,
+  .anim-stagger,
+  .anim-fade {
+    animation: none;
+    opacity: 1;
+  }
+
+  .animate-scroll-down,
+  .animate-scroll-dot,
+  .animate-role-fade-in,
+  .animate-gradient-shift,
+  .animate-ticker-left,
+  .animate-ticker-right {
+    animation: none;
+  }
 }

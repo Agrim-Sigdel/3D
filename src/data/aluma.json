@@ -1,0 +1,258 @@
+{
+  "_readme": "Every string, image path and icon name the `aluma` template renders. Aluma.jsx contains no copy of its own — rebranding the site is an edit to this file only. `icon` values are lucide-react export names, resolved through the ICONS table in Aluma.jsx; a name missing from that table renders no icon rather than crashing.",
+
+  "brand": {
+    "wordmark": "ALUMA",
+    "name": "Aluma",
+    "place": "Lake Sarven",
+    "region": "Northern Highlands",
+    "established": "1974",
+    "documentTitle": "Aluma — A Lakeside Retreat in the Northern Highlands"
+  },
+
+  "nav": {
+    "links": [
+      { "label": "Stay", "href": "#stay" },
+      { "label": "Experiences", "href": "#experiences" },
+      { "label": "Dining", "href": "#dining" },
+      { "label": "Gallery", "href": "#gallery" }
+    ],
+    "cta": { "label": "Check availability", "href": "#enquiry" }
+  },
+
+  "hero": {
+    "video": "/assets/aluma/hero.mp4",
+    "eyebrow": "Lake Sarven · Northern Highlands",
+    "heading": "The lake keeps its own time",
+    "body": "Twenty-four rooms on a shoreline that has looked the same for four thousand years. No schedule, no clocks in the suites, and a boat waiting whenever you want one.",
+    "actions": [
+      { "label": "See the suites", "href": "#stay", "variant": "solid" },
+      { "label": "Plan a stay", "href": "#enquiry", "variant": "ghost" }
+    ],
+    "scrollHint": ""
+  },
+
+  "welcome": {
+    "eyebrow": "Since 1974",
+    "statement": "Aluma began as a fishing cabin with three beds and a stove, built by a family who kept coming back to the same stretch of water. Fifty years later it is a retreat of twenty-four rooms, and it is still the same stretch of water.",
+    "body": [
+      "The buildings are timber and glass, set low against the treeline so the shoreline reads as unbroken from the far bank. Nothing here is taller than the pines.",
+      "Everything is walkable: the sauna at the water's edge, the boathouse, the kitchen garden that supplies most of what arrives at your table. The nearest road is four kilometres behind you and you will not hear it."
+    ]
+  },
+
+  "stats": [
+    { "value": "24", "label": "Suites and lodges" },
+    { "value": "1,400", "label": "Acres of private forest" },
+    { "value": "11 km", "label": "Of open shoreline" },
+    { "value": "50", "label": "Years on this bank" }
+  ],
+
+  "press": [
+    "Condé Nast Traveller — Gold List",
+    "The World's 50 Best Retreats",
+    "Wallpaper* Design Awards",
+    "Nordic Hotel of the Year",
+    "Michelin Green Star — Fen & Ash",
+    "Traveller Made Collection"
+  ],
+
+  "suites": {
+    "eyebrow": "The rooms",
+    "heading": "Four ways to wake up here",
+    "items": [
+      {
+        "name": "Forest Suite",
+        "kind": "Two guests",
+        "size": "48 m²",
+        "body": "Set back into the pines, with a west-facing bed and a wood stove that is lit before you arrive. The darkest room on the property, deliberately.",
+        "features": ["Wood stove", "Deep soaking tub", "Private terrace"],
+        "image": "/assets/aluma/suites/1.jpg",
+        "from": "480"
+      },
+      {
+        "name": "Lake Suite",
+        "kind": "Two guests",
+        "size": "56 m²",
+        "body": "Full-height glass on the water side, four metres from the shore. In still weather the reflection reaches the foot of the bed.",
+        "features": ["Shoreline access", "Outdoor bath", "Morning light"],
+        "image": "/assets/aluma/suites/2.jpg",
+        "from": "620"
+      },
+      {
+        "name": "Ridge Room",
+        "kind": "Two guests",
+        "size": "38 m²",
+        "body": "The highest room at Aluma, above the treeline on the northern slope. Cooler, quieter, and the only one that sees the far peaks.",
+        "features": ["Panoramic window", "Reading nook", "Sunrise aspect"],
+        "image": "/assets/aluma/suites/3.jpg",
+        "from": "410"
+      },
+      {
+        "name": "The Boathouse",
+        "kind": "Up to six guests",
+        "size": "140 m²",
+        "body": "The original 1974 building, rebuilt around its own frame. A whole lodge to yourself, with a jetty, a sauna and a kitchen you are welcome to ignore.",
+        "features": ["Private jetty", "Lakeside sauna", "Full kitchen"],
+        "image": "/assets/aluma/suites/4.jpg",
+        "from": "1,150"
+      }
+    ]
+  },
+
+  "experiences": {
+    "eyebrow": "While you are here",
+    "heading": "Things worth getting out of bed for",
+    "items": [
+      {
+        "icon": "Waves",
+        "title": "Cold water, warm wood",
+        "body": "The sauna sits on the jetty for one reason. Sixteen minutes at ninety degrees, then eight metres to the ladder. Guided sessions at dusk, or take a key and go alone."
+      },
+      {
+        "icon": "Footprints",
+        "title": "Walks with someone who knows",
+        "body": "Four routes across the estate, from an hour along the shore to a full day over the ridge. Led by guides who grew up on this side of the lake."
+      },
+      {
+        "icon": "Sailboat",
+        "title": "The boats",
+        "body": "Six wooden rowing boats and two small sailing dinghies, free to take out at any hour. The lake has no motor traffic and never has."
+      },
+      {
+        "icon": "Sparkles",
+        "title": "Dark skies",
+        "body": "No settlement within forty kilometres. From September the aurora is a regular event, and there is a heated platform on the north shore for watching it."
+      }
+    ]
+  },
+
+  "valley": {
+    "image": "/assets/aluma/valley.jpg",
+    "eyebrow": "The setting",
+    "heading": "Above the cloud line, most mornings",
+    "body": "Lake Sarven sits at 840 metres, in a basin the weather rarely reaches properly. Cloud gathers below the ridge and stays there, so the mornings tend to be clear from the property and grey from the valley floor.",
+    "points": [
+      { "title": "Getting here", "body": "Two hours from the regional airport, the last forty minutes on estate road. We collect you." },
+      { "title": "The season", "body": "Open year-round. Swimming from May, aurora from September, ice on the shallows by January." },
+      { "title": "The estate", "body": "1,400 acres held in a conservation trust since 1991. No development beyond the existing footprint, ever." }
+    ]
+  },
+
+  "spa": {
+    "video": "/assets/aluma/spa.mp4",
+    "eyebrow": "The bathhouse",
+    "heading": "Heat, cold, and nothing to do in between",
+    "body": "Three saunas, a cold plunge cut into the rock, and a treatment room with one therapist and one appointment at a time. Bookable the same day, usually.",
+    "action": { "label": "Enquire about treatments", "href": "#enquiry" }
+  },
+
+  "dining": {
+    "eyebrow": "The table",
+    "heading": "Three kitchens, one garden",
+    "venues": [
+      {
+        "name": "Fen & Ash",
+        "kind": "Dinner, seven courses",
+        "hours": "19:00 — one sitting",
+        "body": "The main room. A set menu built each morning from whatever the garden, the lake and the two farms up the valley have given us.",
+        "image": "/assets/aluma/dining/1.jpg"
+      },
+      {
+        "name": "The Long Room",
+        "kind": "All day",
+        "hours": "07:00 — 22:00",
+        "body": "Breakfast, lunch and everything in between, at a single oak table that seats thirty and rarely does. Come as you are, eat when you like.",
+        "image": "/assets/aluma/dining/2.jpg"
+      },
+      {
+        "name": "The Garden Kitchen",
+        "kind": "Lunch, outdoors",
+        "hours": "12:00 — 15:00, May to September",
+        "body": "Fire, vegetables and one long bench under the apple trees. The shortest supply chain we have: about nine metres.",
+        "image": "/assets/aluma/dining/3.jpg"
+      }
+    ]
+  },
+
+  "testimonials": {
+    "eyebrow": "Guests",
+    "heading": "What people write afterwards",
+    "items": [
+      {
+        "quote": "We booked three nights and changed our flights twice. By the last morning I could tell the weather from the sound of the water before opening the curtains, which is not a thing I knew was possible.",
+        "name": "Ingrid Hallström",
+        "detail": "Lake Suite · March"
+      },
+      {
+        "quote": "The sauna-and-plunge ritual is the reason to come and the food is the reason to stay. Seven courses and not one of them was trying to impress me.",
+        "name": "Tomás Reyes",
+        "detail": "The Boathouse · October"
+      },
+      {
+        "quote": "No clock in the room and no signal on the estate. I resented both for about four hours and then stopped noticing. Came back in the same year, which I never do.",
+        "name": "Amara Osei",
+        "detail": "Ridge Room · September"
+      }
+    ]
+  },
+
+  "gallery": {
+    "eyebrow": "The place",
+    "heading": "Nine hours of daylight, in six frames",
+    "items": [
+      { "src": "/assets/aluma/gallery/1.jpg", "alt": "The jetty at first light", "span": "wide-tall" },
+      { "src": "/assets/aluma/gallery/2.jpg", "alt": "The ridge terrace above the cloud line", "span": "" },
+      { "src": "/assets/aluma/gallery/3.jpg", "alt": "Mist lifting off the valley floor", "span": "" },
+      { "src": "/assets/aluma/gallery/4.jpg", "alt": "The pine track to the north shore", "span": "wide" },
+      { "src": "/assets/aluma/gallery/5.jpg", "alt": "The far peaks under the September aurora", "span": "wide" },
+      { "src": "/assets/aluma/gallery/6.jpg", "alt": "Estate forest from the ridge path", "span": "wide" }
+    ]
+  },
+
+  "enquiry": {
+    "eyebrow": "Availability",
+    "heading": "Twenty-four rooms, and a long waiting list in autumn",
+    "body": "Tell us roughly when, and we will come back within a day with what is actually free.",
+    "fields": {
+      "arrival": "Arrival",
+      "nights": "Nights",
+      "guests": "Guests",
+      "suite": "Room",
+      "email": "Email",
+      "notes": "Anything we should know"
+    },
+    "nightOptions": ["2 nights", "3 nights", "4 nights", "5 nights", "A week", "Longer"],
+    "guestOptions": ["1 guest", "2 guests", "3 guests", "4 guests", "5 guests", "6 guests"],
+    "datePlaceholder": "Choose your arrival",
+    "notesPlaceholder": "Occasions, dietary requirements, whether you want the boat.",
+    "submit": "Send enquiry",
+    "success": "Thank you — we will reply within a day with what is free."
+  },
+
+  "footer": {
+    "cta": {
+      "heading": "Come for three nights. Most people stay longer.",
+      "label": "Check availability",
+      "href": "#enquiry"
+    },
+    "blurb": "A twenty-four room retreat on the north bank of Lake Sarven, held in conservation trust and run by the same family since 1974.",
+    "columns": [
+      { "title": "Stay", "links": ["Forest Suite", "Lake Suite", "Ridge Room", "The Boathouse"] },
+      { "title": "Estate", "links": ["The bathhouse", "Guided walks", "Boats and jetty", "Conservation trust"] }
+    ],
+    "contact": [
+      { "icon": "MapPin", "lines": ["Aluma, North Bank", "Lake Sarven, Northern Highlands"] },
+      { "icon": "Phone", "lines": ["+47 55 21 09 40"] },
+      { "icon": "Clock", "lines": ["Reception 07:00 — 23:00", "Collection from the airport daily"] }
+    ],
+    "newsletter": {
+      "title": "Two letters a year",
+      "body": "What the season is doing, and when rooms open. Nothing else.",
+      "placeholder": "you@example.com",
+      "action": "Subscribe"
+    },
+    "legal": ["Privacy", "Terms", "Conservation trust"],
+    "copyright": "Aluma Lakeside Retreat"
+  }
+}

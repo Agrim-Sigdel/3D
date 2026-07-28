@@ -1,15 +1,26 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function BackButton({ to = -1, label = 'Back' }) {
+/**
+ * `top`/`left` let a screen nudge the control out from under its own chrome.
+ * `fixed` keeps it pinned on the templates that scroll internally — `absolute`
+ * would let it scroll away with the content.
+ */
+export default function BackButton({
+  to = -1,
+  label = 'Back',
+  top = 20,
+  left = 20,
+  fixed = false,
+}) {
   const navigate = useNavigate();
   return (
     <button
       onClick={() => navigate(to)}
       style={{
-        position: 'absolute',
-        top: 20,
-        left: 20,
+        position: fixed ? 'fixed' : 'absolute',
+        top,
+        left,
         zIndex: 1000,
         padding: '8px 18px',
         background: '#222',

@@ -1,0 +1,515 @@
+{
+  "_readme": "Every string, image path, icon name and weave token the `marlowe` template renders. Marlowe.jsx contains no copy of its own, so rebranding this house, translating it, or pointing it at real photography is an edit to this file and a rebuild. `icon` values are lucide-react export names resolved through the ICONS table in the JSX; `weave` and `mark` values resolve through WEAVES and MARKS. A name missing from any of those tables renders nothing rather than throwing, so a typo here degrades instead of white-screening the page. Every `image`, `src` and `video` key may be null: the section falls back to a drawn plate, which is how this template ships. There is no tailoring photography in this repo and nothing may be hotlinked, so the cloth is drawn in CSS rather than shot — see the header comment in Marlowe.jsx. Setting any of these keys to a real path swaps the drawing for the photograph with no code change.",
+
+  "brand": {
+    "wordmark": "MARLOWE & HALE",
+    "mark": "M&H",
+    "name": "Marlowe & Hale",
+    "house": "Bespoke Tailors",
+    "street": "No. 14 Savile Row",
+    "city": "London W1S 3PR",
+    "established": "1868",
+    "warrant": "By appointment",
+    "documentTitle": "Marlowe & Hale — Bespoke Tailors, Savile Row"
+  },
+
+  "nav": {
+    "links": [
+      { "label": "The House", "href": "#house" },
+      { "label": "Commissions", "href": "#commission" },
+      { "label": "Cloth", "href": "#cloth" },
+      { "label": "Order Book", "href": "#orderbook" }
+    ],
+    "cta": { "label": "Request a fitting", "href": "#fitting" }
+  },
+
+  "hero": {
+    "video": null,
+    "weave": "herringbone",
+    "mark": "coat",
+    "eyebrow": "Est. 1868 · No. 14 Savile Row",
+    "heading": "A coat cut for one man only",
+    "body": "Eighty-two hours of hand work, four fittings, and a paper pattern kept for life. We have made in this room since 1868, and we have never made the same coat twice.",
+    "actions": [
+      { "label": "Request a fitting", "href": "#fitting", "variant": "solid" },
+      { "label": "The commission", "href": "#commission", "variant": "ghost" }
+    ],
+    "scrollHint": "Scroll"
+  },
+
+  "register": [
+    "By appointment to the Household Division",
+    "The Rake — House of the Year",
+    "Permanent Style — Best of British Tailoring",
+    "Founding member, Savile Row Bespoke Association",
+    "Financial Times — How to Spend It",
+    "Monocle — The Craft Issue"
+  ],
+
+  "house": {
+    "eyebrow": "The House",
+    "statement": "We are cutters before we are anything else. Everything this house does begins on the board with a length of cloth and a piece of chalk.",
+    "body": [
+      "Josiah Marlowe took the lease on No. 14 in 1868 with one cutting board and a debt to his former master. Thomas Hale joined him nine years later, and the partnership has outlasted six monarchs, two fires and one direct hit in 1941 that took the roof but not the pattern room.",
+      "Those patterns are the house. Eleven thousand four hundred of them, each cut to one man, filed by hand, and kept whether he returns next season or in thirty years. A grandson can order his grandfather's coat and we will cut it from the same paper."
+    ],
+    "stats": [
+      { "value": "1868", "label": "Established" },
+      { "value": "4", "label": "Cutters on the board" },
+      { "value": "11,400", "label": "Patterns kept" },
+      { "value": "82", "label": "Hours in a coat" }
+    ]
+  },
+
+  "aperture": {
+    "clothImage": null,
+    "coatImage": null,
+    "clothWeave": "hopsack",
+    "coatWeave": "herringbone",
+    "before": {
+      "eyebrow": "The length",
+      "heading": "Three and a half metres of cloth"
+    },
+    "after": {
+      "eyebrow": "The pattern",
+      "heading": "Marked, and never marked twice"
+    },
+    "hint": "Keep scrolling"
+  },
+
+  "commission": {
+    "eyebrow": "The Commission",
+    "heading": "Six months, five appointments",
+    "steps": [
+      {
+        "label": "01",
+        "title": "The consultation",
+        "body": "An hour in the front room. What you need the coat to do, where you will wear it, and what you already own that works. No measuring yet.",
+        "meta": "Week one · 60 minutes",
+        "icon": "BookOpen"
+      },
+      {
+        "label": "02",
+        "title": "Measure and cloth",
+        "body": "Thirty-one measurements taken by the cutter who will cut you. The cloth is chosen from the mill books in the same sitting, because the cloth decides the cut.",
+        "meta": "Week one · 90 minutes",
+        "icon": "Ruler"
+      },
+      {
+        "label": "03",
+        "title": "The pattern",
+        "body": "Your pattern is drafted in brown paper and cut by hand. It is yours in perpetuity and it never leaves this building.",
+        "meta": "Weeks two to five",
+        "icon": "PencilRuler"
+      },
+      {
+        "label": "04",
+        "title": "The baste fitting",
+        "body": "The coat comes to you in white basting thread, unfinished and deliberately wrong in places, so the cutter can see what the paper could not tell him.",
+        "meta": "Week eight · 45 minutes",
+        "icon": "Scissors"
+      },
+      {
+        "label": "05",
+        "title": "The forward fitting",
+        "body": "Canvas in, sleeves on, collar set. This is the fitting where the coat stops being an idea. Most commissions need one; some need two.",
+        "meta": "Week fourteen · 45 minutes",
+        "icon": "Feather"
+      },
+      {
+        "label": "06",
+        "title": "Delivery",
+        "body": "Finished, pressed, and your pattern filed. We keep a note of the cloth so the trousers can be repeated in five years when the coat still has life in it.",
+        "meta": "Week twenty-two",
+        "icon": "Stamp"
+      }
+    ]
+  },
+
+  "cuts": {
+    "eyebrow": "The House Cuts",
+    "heading": "Four coats, one board",
+    "items": [
+      {
+        "name": "The Fourteen",
+        "from": "From £5,400",
+        "body": "The house coat. Two buttons, soft shoulder, a light canvas and a slightly extended waist. Named for the door.",
+        "image": null,
+        "alt": "The Fourteen, a two-button single-breasted coat",
+        "weave": "herringbone",
+        "mark": "coat"
+      },
+      {
+        "name": "The Marlowe",
+        "from": "From £5,900",
+        "body": "Josiah's own cut, drafted in 1871 and unchanged since. Higher gorge, roped shoulder, a firmer chest. Worn by men who stand for a living.",
+        "image": null,
+        "alt": "The Marlowe, a structured single-breasted coat",
+        "weave": "chalkstripe",
+        "mark": "coat"
+      },
+      {
+        "name": "The Hale",
+        "from": "From £6,700",
+        "body": "Double-breasted, six on two, with a peak lapel cut long. The most formal thing we make that is not black tie.",
+        "image": null,
+        "alt": "The Hale, a six-on-two double-breasted coat",
+        "weave": "glencheck",
+        "mark": "double"
+      },
+      {
+        "name": "The Evening",
+        "from": "From £7,200",
+        "body": "Dinner jacket, shawl or peak, faced in silk from Macclesfield. Made once and worn for thirty years, which is the correct way round.",
+        "image": null,
+        "alt": "The Evening, a shawl-collar dinner jacket",
+        "weave": "twill",
+        "mark": "dinner"
+      }
+    ]
+  },
+
+  "workroom": {
+    "eyebrow": "The Workroom",
+    "heading": "Four benches, one staircase up",
+    "makers": [
+      {
+        "name": "Edith Rowan",
+        "role": "Head cutter",
+        "years": "31 years on the board",
+        "body": "Learned under the last of the Hales. Cuts every first pattern in the house and will not let a coat leave until the balance is right, which is why some of them are late.",
+        "image": null,
+        "alt": "The head cutter's board",
+        "weave": "chalkstripe"
+      },
+      {
+        "name": "Samuel Achebe",
+        "role": "Coat maker",
+        "years": "22 years at the bench",
+        "body": "Makes the body and the canvas. Everything that gives a coat its shape happens under his hands, and none of it is visible when it is finished.",
+        "image": null,
+        "alt": "The coat maker's bench",
+        "weave": "herringbone"
+      },
+      {
+        "name": "Nadia Sørensen",
+        "role": "Trouser maker",
+        "years": "17 years at the bench",
+        "body": "Trousers are the harder half and the one nobody praises. Hers hang from the waistband without a wrinkle, which is the whole art.",
+        "image": null,
+        "alt": "The trouser maker's bench",
+        "weave": "birdseye"
+      },
+      {
+        "name": "Rory Callan",
+        "role": "Waistcoat and finishing",
+        "years": "9 years at the bench",
+        "body": "Buttonholes, edges, linings, and every stitch that shows. The youngest bench in the room and the one with the steadiest hand.",
+        "image": null,
+        "alt": "The finishing bench",
+        "weave": "hopsack"
+      }
+    ]
+  },
+
+  "cloth": {
+    "eyebrow": "The Cloth Library",
+    "heading": "Nine hundred books, six mills",
+    "note": "Weights in ounces per yard. We will cut anything you bring us, but these are the cloths we know the behaviour of.",
+    "swatches": [
+      {
+        "src": null,
+        "alt": "Lovat herringbone, 13oz",
+        "span": "tall",
+        "weave": "herringbone",
+        "name": "Lovat Herringbone",
+        "mill": "Holbeck & Cross",
+        "weight": "13oz",
+        "weaveLabel": "Herringbone",
+        "caption": "The house tweed. Cut for country coats and the only cloth we will make an unstructured jacket in."
+      },
+      {
+        "src": null,
+        "alt": "City chalkstripe, 11oz",
+        "span": "wide",
+        "weave": "chalkstripe",
+        "name": "City Chalkstripe",
+        "mill": "Ardwick Mills",
+        "weight": "11oz",
+        "weaveLabel": "Chalkstripe",
+        "caption": "Worsted flannel, chalked at seven-eighths of an inch. The stripe is soft enough to read as texture across a room."
+      },
+      {
+        "src": null,
+        "alt": "Midnight birdseye, 10oz",
+        "span": null,
+        "weave": "birdseye",
+        "name": "Midnight Birdseye",
+        "mill": "Fenwold & Sons",
+        "weight": "10oz",
+        "weaveLabel": "Birdseye",
+        "caption": "Navy so dark it reads black under electric light and navy in daylight. The most useful cloth in the book."
+      },
+      {
+        "src": null,
+        "alt": "Border glen check, 12oz",
+        "span": null,
+        "weave": "glencheck",
+        "name": "Border Glen Check",
+        "mill": "Holbeck & Cross",
+        "weight": "12oz",
+        "weaveLabel": "Glen check",
+        "caption": "A quiet check with a faint claret overcheck. Loud enough to notice, quiet enough to wear twice a week."
+      },
+      {
+        "src": null,
+        "alt": "Summer hopsack, 9oz",
+        "span": "wide",
+        "weave": "hopsack",
+        "name": "Summer Hopsack",
+        "mill": "Cairnmoor Weaving",
+        "weight": "9oz",
+        "weaveLabel": "Hopsack",
+        "caption": "An open basket weave that breathes. The only thing we recommend for a coat that has to survive August."
+      },
+      {
+        "src": null,
+        "alt": "Evening barathea, 12oz",
+        "span": "tall",
+        "weave": "twill",
+        "name": "Evening Barathea",
+        "mill": "Ardwick Mills",
+        "weight": "12oz",
+        "weaveLabel": "Barathea",
+        "caption": "The correct cloth for a dinner jacket and the reason a good one does not shine under a flash."
+      }
+    ],
+    "mills": {
+      "label": "Woven for this house by",
+      "items": [
+        { "name": "Holbeck & Cross", "since": "est. 1794" },
+        { "name": "Ardwick Mills", "since": "est. 1826" },
+        { "name": "Fenwold & Sons", "since": "est. 1851" },
+        { "name": "Cairnmoor Weaving", "since": "est. 1883" },
+        { "name": "Draymoor Worsted", "since": "est. 1902" },
+        { "name": "Ellisfield Silk", "since": "est. 1911" }
+      ]
+    }
+  },
+
+  "orderBook": {
+    "eyebrow": "From the Order Book",
+    "heading": "Four commissions, lately",
+    "items": [
+      {
+        "number": "№ 11,207",
+        "category": "Country coat",
+        "title": "A shooting coat for a Perthshire estate",
+        "body": "Lovat herringbone at 13oz, bellows pockets, an action back, and a lining the client chose to match his dogs. Made to be soaked and to dry flat.",
+        "image": null,
+        "alt": "A tweed shooting coat",
+        "weave": "herringbone",
+        "mark": "coat"
+      },
+      {
+        "number": "№ 11,244",
+        "category": "City suit",
+        "title": "A first suit, for a call to the Bar",
+        "body": "Midnight birdseye, the Marlowe cut, and his grandfather's pattern taken out of the file for the trouser rise. Both men were measured in this room forty-one years apart.",
+        "image": null,
+        "alt": "A dark city suit",
+        "weave": "birdseye",
+        "mark": "coat"
+      },
+      {
+        "number": "№ 11,289",
+        "category": "Evening",
+        "title": "A dinner jacket for a fiftieth",
+        "body": "Barathea, shawl collar faced in Ellisfield silk, and one covered button. He asked for it to look like 1962 without looking like a costume.",
+        "image": null,
+        "alt": "A shawl-collar dinner jacket",
+        "weave": "twill",
+        "mark": "dinner"
+      },
+      {
+        "number": "№ 11,301",
+        "category": "Overcoat",
+        "title": "A covert coat, remade from a 1974 pattern",
+        "body": "The original came in with the lining gone and the cloth still sound. We cut a new one from the same pattern and four rows of stitching at the hem, as it was.",
+        "image": null,
+        "alt": "A covert overcoat",
+        "weave": "twill",
+        "mark": "covert"
+      }
+    ]
+  },
+
+  "workshop": {
+    "image": null,
+    "weave": "glencheck",
+    "eyebrow": "Inside No. 14",
+    "heading": "Three floors, one of them below the pavement",
+    "body": "The shop is the smallest part of this building. Above it is the cutting room, above that the workroom, and beneath the pavement the pattern store, which is the only room with a lock on it.",
+    "points": [
+      {
+        "title": "The board",
+        "body": "Nine feet of Honduras mahogany, laid in 1868 and never replaced. Every pattern this house has ever cut was cut on it."
+      },
+      {
+        "title": "The pattern store",
+        "body": "Eleven thousand four hundred patterns in brown paper, filed by name. Nothing is thrown away, including the patterns of men long dead."
+      },
+      {
+        "title": "The books",
+        "body": "Nine hundred cloth books from six mills, kept in date order. The oldest still in use was bound in 1957 and half of it can still be woven."
+      }
+    ]
+  },
+
+  "answers": {
+    "eyebrow": "Answers",
+    "heading": "What people ask before the first appointment",
+    "items": [
+      {
+        "id": "how-long",
+        "question": "How long does a commission take?",
+        "answer": [
+          "Twenty to twenty-four weeks for a first coat, and about sixteen for anything after that, because the pattern already exists.",
+          "We will not rush a first commission. The baste fitting has to be looked at with fresh eyes a week later, and that week is not padding."
+        ]
+      },
+      {
+        "id": "cost",
+        "question": "What does it cost, and what changes the price?",
+        "answer": [
+          "A two-piece begins at £5,400 and the cloth moves it from there. A 9oz hopsack and a 13oz tweed are not the same money, and neither are six buttonholes and twelve.",
+          "The price we quote at the second appointment is the price on delivery. Fittings are not charged for, however many are needed."
+        ]
+      },
+      {
+        "id": "fittings",
+        "question": "How many fittings will I need?",
+        "answer": [
+          "Three is normal for a first commission: baste, forward, and a final try-on at delivery. Some figures need a fourth and we would rather do it than not.",
+          "Fittings are forty-five minutes and we ask that you come in the shoes you will wear with the suit."
+        ]
+      },
+      {
+        "id": "travel",
+        "question": "Do you travel?",
+        "answer": [
+          "Twice a year to New York and Hong Kong, and once to Zurich. Dates go to the order book first and to the register on this page after that.",
+          "A first commission is better begun here, because a first pattern wants a second pair of eyes on the board."
+        ]
+      },
+      {
+        "id": "own-cloth",
+        "question": "Can I bring my own cloth?",
+        "answer": [
+          "Yes, and we will tell you honestly if it will not do what you want. Three and a half metres for a two-piece, four and a quarter with a waistcoat.",
+          "Cloth we have not woven with before is cut at the client's risk, which we will say once and not labour."
+        ]
+      },
+      {
+        "id": "alterations",
+        "question": "Do you alter what you have made?",
+        "answer": [
+          "For as long as the coat exists and whoever is wearing it. Bodies change and a bespoke coat has the inlays to follow them, which is most of the point of one.",
+          "Alterations to our own work are not charged for in the first two years."
+        ]
+      }
+    ]
+  },
+
+  "clients": {
+    "eyebrow": "What Clients Write",
+    "heading": "Letters kept in the order book",
+    "items": [
+      {
+        "quote": "I came in for a suit for a funeral and left having been talked out of it. They made me something I could wear afterwards instead, which is not what a shop does.",
+        "name": "H. Ashworth-Bell",
+        "detail": "Client since 2009"
+      },
+      {
+        "quote": "The coat is fourteen years old. It has been altered three times, relined once, and it still fits better than anything I have bought since.",
+        "name": "Dr. Priya Raghunathan",
+        "detail": "Client since 2011"
+      },
+      {
+        "quote": "My father was measured on that board and so was I. When I brought my son in, Edith found the 1983 pattern in under a minute and did not make a performance of it.",
+        "name": "James Okonkwo-Hart",
+        "detail": "Third generation"
+      }
+    ]
+  },
+
+  "fitting": {
+    "eyebrow": "Request a Fitting",
+    "heading": "The first appointment is an hour and costs nothing",
+    "body": "Tell us roughly what you are after and when you can come. We will write back within two working days with a time, and with the cloth books already out if you have named something.",
+    "fields": {
+      "date": "Preferred date",
+      "time": "Preferred time",
+      "garment": "What you have in mind",
+      "cloth": "Cloth, if you know it",
+      "email": "Email",
+      "notes": "Anything we should know"
+    },
+    "timeOptions": ["09:30", "10:30", "11:30", "14:00", "15:00", "16:00"],
+    "datePlaceholder": "Choose a date",
+    "notesPlaceholder": "An occasion, a deadline, a coat you already own that works…",
+    "submit": "Request the appointment",
+    "success": "Thank you. We will write to you within two working days."
+  },
+
+  "footer": {
+    "cta": {
+      "heading": "Come and be measured",
+      "label": "Request a fitting",
+      "href": "#fitting"
+    },
+    "blurb": "Bespoke tailors at No. 14 Savile Row since 1868. Every garment cut, made and altered in this building.",
+    "columns": [
+      {
+        "title": "The House",
+        "links": [
+          { "label": "Our history", "href": "#house" },
+          { "label": "The workroom", "href": "#workroom" },
+          { "label": "The commission", "href": "#commission" },
+          { "label": "Travelling dates", "href": "#register" }
+        ]
+      },
+      {
+        "title": "Commissions",
+        "links": [
+          { "label": "House cuts", "href": "#cuts" },
+          { "label": "Cloth library", "href": "#cloth" },
+          { "label": "Order book", "href": "#orderbook" },
+          { "label": "Alterations", "href": "#answers" }
+        ]
+      }
+    ],
+    "contact": [
+      { "icon": "MapPin", "lines": ["No. 14 Savile Row", "London W1S 3PR"] },
+      { "icon": "Phone", "lines": ["+44 20 7946 0114"] },
+      { "icon": "Clock", "lines": ["Monday to Friday, 9–6", "Saturday by appointment"] }
+    ],
+    "newsletter": {
+      "title": "The Register",
+      "body": "Travelling dates and new cloth, four times a year. Nothing else.",
+      "placeholder": "Your email",
+      "action": "Subscribe"
+    },
+    "social": [
+      { "name": "Instagram", "href": "#" },
+      { "name": "X", "href": "#" },
+      { "name": "LinkedIn", "href": "#" }
+    ],
+    "legal": [
+      { "label": "Terms", "href": "#" },
+      { "label": "Privacy", "href": "#" },
+      { "label": "Cookies", "href": "#" }
+    ],
+    "copyright": "© 2026 Marlowe & Hale. All rights reserved."
+  }
+}
